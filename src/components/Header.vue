@@ -6,7 +6,7 @@
 			:src="icon"
 			fit="fit">
 		</el-image>
-		<el-menu :default-active="activeIndex" ref="menu" mode="horizontal" @select="handleSelect" text-color="#000000" class="gis-menu">
+		<el-menu :default-active="activeIndex" ref="menu" mode="horizontal" @select="handleSelect" text-color="#34495e" class="gis-menu">
 			<el-menu-item index="/home"><span>Home</span></el-menu-item>
 			<el-menu-item index="/tags"><span>Tags</span></el-menu-item>
 			<el-menu-item index="/archives"><span>Archives</span></el-menu-item>
@@ -60,17 +60,17 @@ export default {
 
 /*覆盖elementUI原有样式*/
 .el-menu-item {
-	font-size: 15px;
+	font-size: 16px;
 	padding: 0 10px;
 }
 
 .el-menu-item.is-active {
 	border-bottom: transparent;
-	color: #000000;
+	color: #34495e;
 }
 
 .el-menu-item.is-active span {
-	padding-bottom: 5px;
+	padding-bottom: 3px;
 	border-bottom: 3px solid;
 	border-bottom-color: #42B983;
 }

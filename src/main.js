@@ -10,6 +10,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 // 引入vuex的store实例
 import store from './store'
+// 引入font-awesome
+import 'font-awesome/css/font-awesome.min.css'
 
 Vue.use(ElementUI)
 Vue.prototype.$http = axios
