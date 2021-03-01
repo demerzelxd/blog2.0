@@ -12,10 +12,25 @@ import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
 // 引入font-awesome
 import 'font-awesome/css/font-awesome.min.css'
+// 引入加载条
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 Vue.use(ElementUI)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
+// 配置NProgress
+NProgress.inc(0.2)
+NProgress.configure({ easing: 'ease', speed: 500 })
+
+router.beforeEach((to, from, next) => {
+	NProgress.start()
+	next()
+})
+
+router.afterEach(() => {
+	NProgress.done()
+})
 
 /* eslint-disable no-new */
 new Vue({

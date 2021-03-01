@@ -35,4 +35,11 @@ export default {
 .gis-header {
 	box-shadow: 0 0 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
 }
+/*自定义进度条样式*/
+#nprogress .bar {
+	background: #42B983;
+}
+#nprogress .spinner {
+	display: none;
+}
 </style>

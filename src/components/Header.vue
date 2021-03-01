@@ -1,6 +1,6 @@
 <template>
 	<!--导航菜单-->
-	<nav class="gis-nav">
+	<div class="gis-nav">
 		<el-image
 			class="gis-logo"
 			:src="icon"
@@ -13,7 +13,7 @@
 			<el-menu-item index="/projects"><span>Projects</span></el-menu-item>
 			<el-menu-item index="/about"><span>About</span></el-menu-item>
 		</el-menu>
-	</nav>
+	</div>
 </template>
 
 <script>
