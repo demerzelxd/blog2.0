@@ -64,6 +64,12 @@ export default {
 	padding: 0 10px;
 }
 
+.el-menu-item:hover span {
+	padding-bottom: 3px;
+	border-bottom: 3px solid;
+	border-bottom-color: #42B983;
+}
+
 .el-menu-item.is-active {
 	border-bottom: transparent;
 	color: #34495e;

@@ -15,6 +15,8 @@ import 'font-awesome/css/font-awesome.min.css'
 // 引入加载条
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+// 引入全局axios拦截
+import './axios-interceptor'
 
 Vue.use(ElementUI)
 Vue.prototype.$http = axios
