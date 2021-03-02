@@ -4,10 +4,12 @@
 		<el-image
 			class="gis-logo"
 			:src="icon"
-			fit="fit">
+			fit="fit"
+			@click="refresh()"
+			style="cursor: pointer">
 		</el-image>
 		<el-menu :default-active="activeIndex" ref="menu" mode="horizontal" @select="handleSelect" text-color="#34495e" class="gis-menu">
-			<el-menu-item index="/home"><span>Home</span></el-menu-item>
+			<el-menu-item index="/home" @click="refresh()"><span>Home</span></el-menu-item>
 			<el-menu-item index="/tags"><span>Tags</span></el-menu-item>
 			<el-menu-item index="/archives"><span>Archives</span></el-menu-item>
 			<el-menu-item index="/projects"><span>Projects</span></el-menu-item>
@@ -34,6 +36,9 @@ export default {
 			if (this.$route.path !== key) {
 				this.$router.push(key)
 			}
+		},
+		refresh () {
+			this.$router.go(0)
 		}
 	}
 }

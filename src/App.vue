@@ -8,6 +8,8 @@
 				<router-view/>
 			</el-main>
 		</el-container>
+		<!--向上滚动-->
+		<el-backtop/>
 	</div>
 </template>
 
@@ -41,5 +43,18 @@ export default {
 }
 #nprogress .spinner {
 	display: none;
+}
+/*自定义滚动条 */
+::-webkit-scrollbar {
+	width: 3px;
+	height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #42B983;
+  border-radius: 10px;
+}
+/*自定义backTop*/
+.el-backtop, .el-calendar-table td.is-today {
+	color: teal
 }
 </style>

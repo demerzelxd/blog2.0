@@ -1,15 +1,15 @@
 <template>
 	<transition>
 		<div class="gis-list-container" v-show="isShow">
-			<el-row v-for="(post, index) in postList" :key="index" v-if="index % 2 === 0" style="margin-bottom: 20px;">
+			<el-row v-for="(post, index) in postList" :key="index" v-if="index % 2 === 0" style="margin-bottom: 25px;">
 				<!--左侧栏-->
 				<el-col :span="11">
 					<el-card :body-style="{ padding: '0px' }">
 						<div class="gis-img-container">
-							<el-image class="image" :src="getUrl(post.title)" fit="cover">
+							<el-image class="image" :src="getUrl(post)" fit="cover">
 							</el-image>
 							<div class="gis-mask" @click="onMaskClick(post.id)">
-								<p style="margin: 50px">
+								<p style="max-width: 400px; max-height: 100px; margin: 15px auto;">
 									{{ post.description }}
 								</p>
 							</div>
@@ -20,10 +20,10 @@
 							</router-link>
 							<div class="bottom clearfix">
 								<time class="time">{{ post.createTime }}</time>
-								<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: #42b983">
+								<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
 									#Java
 								</router-link>
-								<router-link :to="{name: 'PostDetail', params: {postId: post.id}}" type="button" class="gis-button-tag">
+								<router-link :to="{name: 'PostDetail', params: {postId: post.id}}" type="button" class="gis-router-link">
 									Read more
 								</router-link>
 							</div>
@@ -34,10 +34,10 @@
 				<el-col :span="11" :offset="2" v-if='index + 1 < postList.length'>
 					<el-card :body-style="{ padding: '0px' }">
 						<div class="gis-img-container">
-							<el-image class="image" :src="getUrl(postList[index + 1].title)" fit="cover">
+							<el-image class="image" :src="getUrl(postList[index + 1])" fit="cover">
 							</el-image>
 							<div class="gis-mask" @click="onMaskClick(postList[index + 1].id)">
-								<p style="margin: 50px">
+								<p style="max-width: 400px; max-height: 100px; margin: 15px auto;">
 									{{ postList[index + 1].description }}
 								</p>
 							</div>
@@ -48,10 +48,10 @@
 							</router-link>
 							<div class="bottom clearfix">
 								<time class="time">{{ postList[index + 1].createTime }}</time>
-								<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: #42b983">
+								<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
 									#Java
 								</router-link>
-								<router-link :to="{name: 'PostDetail', params: {postId: postList[index + 1].id}}" type="button" class="gis-button-tag">
+								<router-link :to="{name: 'PostDetail', params: {postId: postList[index + 1].id}}" type="button" class="gis-router-link">
 									Read more
 								</router-link>
 							</div>
@@ -61,15 +61,14 @@
 			</el-row>
 			<!--分页-->
 			<el-pagination
-				layout="next, total"
-				background
+				layout="prev, pager, next, sizes"
 				:page-size="pageSize"
 				:current-page="pageNow"
-				:page-sizes="[4, 8, 12, 16]"
+				:page-sizes="[8, 12, 16]"
 				:total="total"
 				@current-change="findPage"
 				@size-change="findSize"
-				style="text-align: right">
+				style="text-align: right; margin-top: 40px;">
 			</el-pagination>
 		</div>
 	</transition>
@@ -83,14 +82,18 @@ export default {
 			isShow: false,
 			total: 0,
 			pageNow: 1,
-			pageSize: 4,
+			pageSize: 8,
 			postList: []
 		}
 	},
 	methods: {
 		// 随机生成占位图
-		getUrl (description) {
-			return require('geopattern').generate(description).toDataUri()
+		getUrl (post) {
+			if (post.banner) {
+				return post.banner
+			}
+			// return require('geopattern').generate(post.title).toDataUri()
+			return 'http://source.unsplash.com/random/900x300'
 		},
 		// 获取所有文章
 		getPostList (pageNow, pageSize) {
@@ -128,7 +131,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .gis-list-container {
 	max-width: 1000px;
 	margin: 0 auto;
@@ -163,9 +166,9 @@ export default {
 }
 
 /*router-link按钮样式*/
-.gis-button-tag {
+.gis-router-link {
 	float: right;
-	font-size: 15px;
+	font-size: 14px;
 	font-weight: bold;
 	color: #42b983 !important;
 }
@@ -211,7 +214,7 @@ export default {
 
 /*重写router-link样式*/
 a:-webkit-any-link {
-	color: #000000;
+	color: #34495e;
 	text-decoration: none;
 }
 
@@ -222,4 +225,48 @@ a:-webkit-any-link {
 a:-webkit-any-link:active {
 	color: #42b983;
 }
+/*自定义分页组件*/
+.el-pager li:hover {
+	color: #42b983 !important;
+}
+
+.el-pager li.active {
+	color: #42b983 !important;
+}
+
+.el-select-dropdown__item {
+	font-family: 'Source Sans Pro', 'Noto Serif SC', sans-serif;
+}
+
+.el-select-dropdown__item.selected {
+	color: #42b983 !important;
+}
+
+.el-select .el-input.is-focus .el-input__inner {
+	border-color: #42b983 !important;
+}
+
+.el-pagination__sizes .el-input .el-input__inner:hover {
+	border-color: #42b983 !important;
+}
+
+.el-select .el-input__inner:focus {
+	border-top-color: #42b983 !important;
+	border-right-color: #42b983 !important;
+	border-bottom-color: #42b983 !important;
+	border-left-color: #42b983 !important;
+}
+
+.el-pagination button:hover {
+	color: #42b983 !important;
+}
+
+input {
+	font-family: 'Source Sans Pro', 'Noto Serif SC', sans-serif;
+}
+
+.el-pagination button:disabled {
+	display: none;
+}
+
 </style>
