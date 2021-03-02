@@ -8,7 +8,7 @@
 			@click="refresh()"
 			style="cursor: pointer">
 		</el-image>
-		<el-menu :default-active="activeIndex" ref="menu" mode="horizontal" @select="handleSelect" text-color="#34495e" class="gis-menu">
+		<el-menu :default-active="getActiveIndex()" mode="horizontal" @select="handleSelect" text-color="#34495e" class="gis-menu">
 			<el-menu-item index="/home" @click="refresh()"><span>Home</span></el-menu-item>
 			<el-menu-item index="/tags"><span>Tags</span></el-menu-item>
 			<el-menu-item index="/archives"><span>Archives</span></el-menu-item>
@@ -24,9 +24,7 @@ export default {
 	name: 'Header',
 	data () {
 		return {
-			icon: icon,
-			// 当前激活的路由路径
-			activeIndex: this.$route.path
+			icon: icon
 		}
 	},
 	methods: {
@@ -38,9 +36,29 @@ export default {
 			}
 		},
 		refresh () {
-			this.$router.go(0)
+			if (this.$route.path === '/home') {
+				this.$router.go(0)
+			} else {
+				this.$router.push('/home')
+			}
+		},
+		// 获取当前激活路由
+		getActiveIndex () {
+			// 形如/tag/Java
+			if (this.$route.path.lastIndexOf('/') !== 0) {
+				// 返回形如/tag
+				return ('/' + this.$route.path.split('/')[1])
+			}
+			// 形如/index直接返回
+			return this.$route.path
 		}
 	}
+	// 监听路由变化
+	// watch: {
+	// 	$route (to, from) {
+	// 		console.log(from.path, to.path)
+	// 	}
+	// }
 }
 </script>
 
@@ -50,6 +68,7 @@ export default {
 	max-width: 1200px;
 	margin: 0 auto;
 	height: 100%;
+	background-color: rgba(255, 255, 255, 0.9);
 }
 /*logo样式*/
 .gis-logo {
@@ -60,13 +79,22 @@ export default {
 /*menu样式*/
 .gis-menu {
 	float: right;
-	height: 99%;
+	height: 100%;
 }
 
 /*覆盖elementUI原有样式*/
+.el-menu.el-menu--horizontal {
+	border-bottom: none;
+	background-color: rgba(255, 255, 255, 0);
+}
+
 .el-menu-item {
 	font-size: 16px;
 	padding: 0 10px;
+}
+
+.el-menu-item:hover {
+	outline: none;
 }
 
 .el-menu-item:hover span {

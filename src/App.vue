@@ -4,9 +4,14 @@
 			<el-header class="gis-header">
 				<Header/>
 			</el-header>
-			<el-main>
+			<el-main class="gis-main">
 				<router-view/>
 			</el-main>
+			<el-footer>
+				<div class="gis-footer">
+					<p>Designed and Coded by © <el-link :underline="false" style="color: #42b983; margin-bottom: 2px" @click="refresh()">Giskard</el-link></p>
+				</div>
+			</el-footer>
 		</el-container>
 		<!--向上滚动-->
 		<el-backtop/>
@@ -17,7 +22,16 @@
 import Header from './components/Header'
 export default {
 	name: 'App',
-	components: {Header}
+	components: {Header},
+	methods: {
+		refresh () {
+			if (this.$route.path === '/home') {
+				this.$router.go(0)
+			} else {
+				this.$router.push('/home')
+			}
+		}
+	}
 }
 </script>
 
@@ -35,7 +49,26 @@ export default {
 	color: #34495e;
 }
 .gis-header {
+	/*固定*/
+	position: fixed;
+	width: 100%;
+	left: 0;
+	top: 0;
+	z-index: 1000;
+	/*阴影*/
 	box-shadow: 0 0 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+}
+.gis-main {
+	margin-top: 65px;
+	width: 100%;
+	height: 100%
+}
+.gis-footer {
+	max-width: 1200px;
+	margin: 10px auto;
+	text-align: center;
+	font-size: 8px;
+	color: #999;
 }
 /*自定义进度条样式*/
 #nprogress .bar {
@@ -46,7 +79,7 @@ export default {
 }
 /*自定义滚动条 */
 ::-webkit-scrollbar {
-	width: 3px;
+	width: 4px;
 	height: 5px;
 }
 ::-webkit-scrollbar-thumb {

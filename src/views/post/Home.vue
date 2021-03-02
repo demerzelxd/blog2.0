@@ -9,7 +9,7 @@
 							<el-image class="image" :src="getUrl(post)" fit="cover">
 							</el-image>
 							<div class="gis-mask" @click="onMaskClick(post.id)">
-								<p style="max-width: 400px; max-height: 100px; margin: 15px auto;">
+								<p style="max-width: 400px; max-height: 100px; margin: 20px auto;">
 									{{ post.description }}
 								</p>
 							</div>
@@ -19,7 +19,7 @@
 								<span ref="titleLink">{{ post.title }}</span>
 							</router-link>
 							<div class="bottom clearfix">
-								<time class="time">{{ post.createTime }}</time>
+								<time class="time">{{ getCreateTime(post.createTime) }}</time>
 								<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
 									#Java
 								</router-link>
@@ -37,7 +37,7 @@
 							<el-image class="image" :src="getUrl(postList[index + 1])" fit="cover">
 							</el-image>
 							<div class="gis-mask" @click="onMaskClick(postList[index + 1].id)">
-								<p style="max-width: 400px; max-height: 100px; margin: 15px auto;">
+								<p style="max-width: 400px; max-height: 100px; margin: 20px auto;">
 									{{ postList[index + 1].description }}
 								</p>
 							</div>
@@ -47,7 +47,7 @@
 								<span ref="titleLink">{{ postList[index + 1].title }}</span>
 							</router-link>
 							<div class="bottom clearfix">
-								<time class="time">{{ postList[index + 1].createTime }}</time>
+								<time class="time">{{ getCreateTime(postList[index + 1].createTime) }}</time>
 								<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
 									#Java
 								</router-link>
@@ -60,6 +60,8 @@
 				</el-col>
 			</el-row>
 			<!--分页-->
+			<!--只有一页或无数据时隐藏-->
+			<!--:hide-on-single-page="value"-->
 			<el-pagination
 				layout="prev, pager, next, sizes"
 				:page-size="pageSize"
@@ -68,6 +70,7 @@
 				:total="total"
 				@current-change="findPage"
 				@size-change="findSize"
+				:hide-on-single-page="pages === 1"
 				style="text-align: right; margin-top: 40px;">
 			</el-pagination>
 		</div>
@@ -80,6 +83,7 @@ export default {
 	data () {
 		return {
 			isShow: false,
+			pages: 1,
 			total: 0,
 			pageNow: 1,
 			pageSize: 8,
@@ -104,6 +108,7 @@ export default {
 				// console.log(resp.data);
 				this.postList = resp.data.data.records
 				this.total = resp.data.data.total
+				this.pages = resp.data.data.pages
 			})
 		},
 		findPage (page) {
@@ -121,6 +126,12 @@ export default {
 		// 点击遮罩层调往文章详情页
 		onMaskClick (id) {
 			this.$router.push({name: 'PostDetail', params: {postId: id}})
+		},
+		// 格式化日期
+		getCreateTime (createTime) {
+			let date = new Date(createTime)
+			let dateString = date.toDateString()
+			return dateString.split(' ')[1] + ' ' + dateString.split(' ')[2] + ', ' + dateString.split(' ')[3]
 		}
 	},
 	mounted () {
