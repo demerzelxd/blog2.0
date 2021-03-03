@@ -26,7 +26,7 @@ export default {
 		return {
 			icon: icon,
 			textColor: '#34495e',
-			scroll: ''
+			scrollTop: ''
 		}
 	},
 	methods: {
@@ -57,30 +57,42 @@ export default {
 		// 监听侧边的滚动条
 		handleScroll () {
 			// 滚动距离
-			this.scroll = document.documentElement.scrollTop || document.body.scrollTop
-			console.log(this.scroll)
+			this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+			if (this.$route.path !== '/home') {
+				// 当路由非首页且滚动距离为0
+				if ((this.$route.path !== '/home') && (this.scrollTop === '' || this.scrollTop === 0)) {
+					this.textColor = '#FFFFFF'
+				} else {
+					// 当路由非首页且滚动距离大于0
+					this.textColor = '#34495e'
+				}
+			}
 		}
 	},
 	computed: {
 		gisSwitchNav () {
-			// 当路由非首页且滚动距离<=10，启用gisSwitchNav样式，隐藏背景色与box-shadow
-			return {gisSwitchNav: this.$route.path !== '/home'}
+			// 当路由非首页且滚动距离为0，启用gisSwitchNav样式，隐藏背景色与box-shadow
+			// console.log('实际：' + this.scrollTop)
+			return {gisSwitchNav: (this.$route.path !== '/home') && (this.scrollTop === '' || this.scrollTop === 0)}
 		}
 	},
 	mounted () {
 		if (this.$route.path !== '/home') {
+			// 路由非首页，在一开始把字体颜色设为白色
 			this.textColor = '#FFFFFF'
-		} else {
-			// 监听滚动条
-			window.addEventListener('scroll', this.handleScroll)
 		}
+		// 监听滚动条
+		window.addEventListener('scroll', this.handleScroll, true)
+	},
+	beforeDestroy () {
+		window.removeEventListener('scroll', this.handleScroll, false)
 	}
 	// 监听路由变化
-	// watch: {
-	// 	$route (to, from) {
-	// 		console.log(from.path, to.path)
-	// 	}
-	// }
+		// watch: {
+		// 	$route (to, from) {
+		// 		console.log(from.path, to.path)
+		// 	}
+		// }
 }
 </script>
 
@@ -92,7 +104,7 @@ export default {
 }
 .gis-nav {
 	margin: 0 auto;
-	background-color: rgba(255, 255, 255, 0.8);
+	background-color: rgba(255, 255, 255, 0.9);
 	/*固定*/
 	position: fixed;
 	width: 100%;
