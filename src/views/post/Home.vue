@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<Header></Header>
-		<transition>
-			<div class="gis-list-container" v-show="isShow">
+		<Header/>
+		<transition name="gis-list-container">
+			<div class="gis-list-container" v-show="isListShow">
 				<el-row v-for="(post, index) in postList" :key="index" v-if="index % 2 === 0" style="margin-bottom: 25px;">
 					<!--左侧栏-->
 					<el-col :span="11">
@@ -86,7 +86,7 @@ export default {
 	name: 'Home',
 	data () {
 		return {
-			isShow: false,
+			isListShow: false,
 			pages: 1,
 			total: 0,
 			pageNow: 1,
@@ -103,9 +103,9 @@ export default {
 			if (post.banner) {
 				return post.banner
 			}
-			// return require('geopattern').generate(post.title).toDataUri()
+			return require('geopattern').generate(post.title).toDataUri()
 			// return 'http://source.unsplash.com/random/900x300'
-			return 'https://picsum.photos/id/1021/900/300'
+			// return 'https://picsum.photos/id/1021/900/300'
 		},
 		// 获取所有文章
 		getPostList (pageNow, pageSize) {
@@ -144,7 +144,7 @@ export default {
 	},
 	mounted () {
 		// 渐入显示文章列表
-		this.isShow = true
+		this.isListShow = true
 		this.getPostList()
 	}
 }
@@ -154,6 +154,7 @@ export default {
 .gis-list-container {
 	max-width: 1000px;
 	margin: 85px auto;
+	min-height: 400px;
 	height: 100%;
 }
 
@@ -220,15 +221,15 @@ export default {
 }
 
 /*重写transition样式*/
-.v-enter,
-.v-leave-to {
+.gis-list-container-enter,
+.gis-list-container-leave-to {
 	opacity: 0;
 	transform: translateY(-20px);
 }
 
-.v-enter-active,
-.v-leave-active {
-	transition: all 0.8s ease;
+.gis-list-container-enter-active,
+.gis-list-container-leave-active {
+	transition: all 2s ease;
 }
 
 /*重写router-link样式*/

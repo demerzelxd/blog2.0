@@ -6,9 +6,9 @@
 			:src="icon"
 			fit="fit"
 			@click="refresh()"
-			style="cursor: pointer; margin-left: 60px">
+			style="cursor: pointer; margin-left: 60px;float: left">
 		</el-image>
-		<el-menu :default-active="getActiveIndex()" ref="menu" mode="horizontal" @select="handleSelect" :text-color="textColor" class="gis-menu">
+		<el-menu :default-active="getActiveIndex()" mode="horizontal" @select="handleSelect" :text-color="textColor" class="gis-menu">
 			<el-menu-item index="/home" @click="refresh()"><span>Home</span></el-menu-item>
 			<el-menu-item index="/tags"><span>Tags</span></el-menu-item>
 			<el-menu-item index="/archives"><span>Archives</span></el-menu-item>
@@ -58,9 +58,9 @@ export default {
 		handleScroll () {
 			// 滚动距离
 			this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-			if (this.$route.path !== '/home') {
+			if (!this.isRouterHome) {
 				// 当路由非首页且滚动距离为0
-				if ((this.$route.path !== '/home') && (this.scrollTop === '' || this.scrollTop === 0)) {
+				if (this.isScrollTopZero) {
 					this.textColor = '#FFFFFF'
 				} else {
 					// 当路由非首页且滚动距离大于0
@@ -70,10 +70,20 @@ export default {
 		}
 	},
 	computed: {
+		// 计算属性
+		isRouterHome () {
+			// 当前是否为Home路由
+			return this.$route.path === '/home'
+		},
+		isScrollTopZero () {
+			// 滚动距离是否为空或0
+			return this.scrollTop === '' || this.scrollTop === 0
+		},
+		// 控制样式是否展示
 		gisSwitchNav () {
 			// 当路由非首页且滚动距离为0，启用gisSwitchNav样式，隐藏背景色与box-shadow
 			// console.log('实际：' + this.scrollTop)
-			return {gisSwitchNav: (this.$route.path !== '/home') && (this.scrollTop === '' || this.scrollTop === 0)}
+			return {gisSwitchNav: !this.isRouterHome && this.isScrollTopZero}
 		}
 	},
 	mounted () {
@@ -114,6 +124,7 @@ export default {
 	z-index: 1000;
 	/*阴影*/
 	box-shadow: 0 0 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+	font-family: sans-serif;
 }
 /*logo样式*/
 .gis-logo {
@@ -135,7 +146,7 @@ export default {
 }
 
 .el-menu-item {
-	font-size: 16px;
+	font-size: 14px;
 	padding: 0 10px;
 }
 
