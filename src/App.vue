@@ -1,10 +1,7 @@
 <template>
 	<div id="app">
 		<el-container>
-			<el-header class="gis-header">
-				<Header/>
-			</el-header>
-			<el-main class="gis-main">
+			<el-main style="padding: 0">
 				<router-view/>
 			</el-main>
 			<el-footer>
@@ -19,10 +16,8 @@
 </template>
 
 <script>
-import Header from './components/Header'
 export default {
 	name: 'App',
-	components: {Header},
 	methods: {
 		refresh () {
 			if (this.$route.path === '/home') {
@@ -48,24 +43,9 @@ export default {
 	-moz-osx-font-smoothing: grayscale;
 	color: #34495e;
 }
-.gis-header {
-	/*固定*/
-	position: fixed;
-	width: 100%;
-	left: 0;
-	top: 0;
-	z-index: 1000;
-	/*阴影*/
-	box-shadow: 0 0 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-}
-.gis-main {
-	margin-top: 65px;
-	width: 100%;
-	height: 100%
-}
 .gis-footer {
 	max-width: 1200px;
-	margin: 10px auto;
+	margin: 0 auto;
 	text-align: center;
 	font-size: 8px;
 	color: #999;

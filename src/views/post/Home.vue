@@ -1,83 +1,87 @@
 <template>
-	<transition>
-		<div class="gis-list-container" v-show="isShow">
-			<el-row v-for="(post, index) in postList" :key="index" v-if="index % 2 === 0" style="margin-bottom: 25px;">
-				<!--左侧栏-->
-				<el-col :span="11">
-					<el-card :body-style="{ padding: '0px' }">
-						<div class="gis-img-container">
-							<el-image class="image" :src="getUrl(post)" fit="cover">
-							</el-image>
-							<div class="gis-mask" @click="onMaskClick(post.id)">
-								<p style="max-width: 400px; max-height: 100px; margin: 20px auto;">
-									{{ post.description }}
-								</p>
+	<div>
+		<Header></Header>
+		<transition>
+			<div class="gis-list-container" v-show="isShow">
+				<el-row v-for="(post, index) in postList" :key="index" v-if="index % 2 === 0" style="margin-bottom: 25px;">
+					<!--左侧栏-->
+					<el-col :span="11">
+						<el-card :body-style="{ padding: '0px' }">
+							<div class="gis-img-container">
+								<el-image class="image" :src="getUrl(post)" fit="cover">
+								</el-image>
+								<div class="gis-mask" @click="onMaskClick(post.id)">
+									<p style="max-width: 400px; max-height: 100px; margin: 20px auto;">
+										{{ post.description }}
+									</p>
+								</div>
 							</div>
-						</div>
-						<div style="padding: 10px;">
-							<router-link :to="{name: 'PostDetail', params: {postId: post.id}}">
-								<span ref="titleLink">{{ post.title }}</span>
-							</router-link>
-							<div class="bottom clearfix">
-								<time class="time">{{ getCreateTime(post.createTime) }}</time>
-								<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
-									#Java
+							<div style="padding: 10px;">
+								<router-link :to="{name: 'PostDetail', params: {postId: post.id}}">
+									<span ref="titleLink">{{ post.title }}</span>
 								</router-link>
-								<router-link :to="{name: 'PostDetail', params: {postId: post.id}}" type="button" class="gis-router-link">
-									Read more
-								</router-link>
+								<div class="bottom clearfix">
+									<time class="time">{{ getCreateTime(post.createTime) }}</time>
+									<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
+										#Java
+									</router-link>
+									<router-link :to="{name: 'PostDetail', params: {postId: post.id}}" type="button" class="gis-router-link">
+										Read more
+									</router-link>
+								</div>
 							</div>
-						</div>
-					</el-card>
-				</el-col>
-				<!--右侧栏-->
-				<el-col :span="11" :offset="2" v-if='index + 1 < postList.length'>
-					<el-card :body-style="{ padding: '0px' }">
-						<div class="gis-img-container">
-							<el-image class="image" :src="getUrl(postList[index + 1])" fit="cover">
-							</el-image>
-							<div class="gis-mask" @click="onMaskClick(postList[index + 1].id)">
-								<p style="max-width: 400px; max-height: 100px; margin: 20px auto;">
-									{{ postList[index + 1].description }}
-								</p>
+						</el-card>
+					</el-col>
+					<!--右侧栏-->
+					<el-col :span="11" :offset="2" v-if='index + 1 < postList.length'>
+						<el-card :body-style="{ padding: '0px' }">
+							<div class="gis-img-container">
+								<el-image class="image" :src="getUrl(postList[index + 1])" fit="cover">
+								</el-image>
+								<div class="gis-mask" @click="onMaskClick(postList[index + 1].id)">
+									<p style="max-width: 400px; max-height: 100px; margin: 20px auto;">
+										{{ postList[index + 1].description }}
+									</p>
+								</div>
 							</div>
-						</div>
-						<div style="padding: 10px;">
-							<router-link :to="{name: 'PostDetail', params: {postId: postList[index + 1].id}}">
-								<span ref="titleLink">{{ postList[index + 1].title }}</span>
-							</router-link>
-							<div class="bottom clearfix">
-								<time class="time">{{ getCreateTime(postList[index + 1].createTime) }}</time>
-								<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
-									#Java
+							<div style="padding: 10px;">
+								<router-link :to="{name: 'PostDetail', params: {postId: postList[index + 1].id}}">
+									<span ref="titleLink">{{ postList[index + 1].title }}</span>
 								</router-link>
-								<router-link :to="{name: 'PostDetail', params: {postId: postList[index + 1].id}}" type="button" class="gis-router-link">
-									Read more
-								</router-link>
+								<div class="bottom clearfix">
+									<time class="time">{{ getCreateTime(postList[index + 1].createTime) }}</time>
+									<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
+										#Java
+									</router-link>
+									<router-link :to="{name: 'PostDetail', params: {postId: postList[index + 1].id}}" type="button" class="gis-router-link">
+										Read more
+									</router-link>
+								</div>
 							</div>
-						</div>
-					</el-card>
-				</el-col>
-			</el-row>
-			<!--分页-->
-			<!--只有一页或无数据时隐藏-->
-			<!--:hide-on-single-page="value"-->
-			<el-pagination
-				layout="prev, pager, next, sizes"
-				:page-size="pageSize"
-				:current-page="pageNow"
-				:page-sizes="[8, 12, 16]"
-				:total="total"
-				@current-change="findPage"
-				@size-change="findSize"
-				:hide-on-single-page="pages === 1"
-				style="text-align: right; margin-top: 40px;">
-			</el-pagination>
-		</div>
-	</transition>
+						</el-card>
+					</el-col>
+				</el-row>
+				<!--分页-->
+				<!--只有一页或无数据时隐藏-->
+				<!--:hide-on-single-page="value"-->
+				<el-pagination
+					layout="prev, pager, next, sizes"
+					:page-size="pageSize"
+					:current-page="pageNow"
+					:page-sizes="[8, 12, 16]"
+					:total="total"
+					@current-change="findPage"
+					@size-change="findSize"
+					:hide-on-single-page="pages === 1"
+					style="text-align: right; margin-top: 40px; margin-bottom: -50px">
+				</el-pagination>
+			</div>
+		</transition>
+	</div>
 </template>
 
 <script>
+import Header from '../../components/Header'
 export default {
 	name: 'Home',
 	data () {
@@ -90,6 +94,9 @@ export default {
 			postList: []
 		}
 	},
+	components: {
+		Header
+	},
 	methods: {
 		// 随机生成占位图
 		getUrl (post) {
@@ -97,7 +104,8 @@ export default {
 				return post.banner
 			}
 			// return require('geopattern').generate(post.title).toDataUri()
-			return 'http://source.unsplash.com/random/900x300'
+			// return 'http://source.unsplash.com/random/900x300'
+			return 'https://picsum.photos/id/1021/900/300'
 		},
 		// 获取所有文章
 		getPostList (pageNow, pageSize) {
@@ -145,7 +153,7 @@ export default {
 <style>
 .gis-list-container {
 	max-width: 1000px;
-	margin: 0 auto;
+	margin: 85px auto;
 	height: 100%;
 }
 
