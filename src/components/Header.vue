@@ -96,13 +96,24 @@ export default {
 	},
 	beforeDestroy () {
 		window.removeEventListener('scroll', this.handleScroll, false)
-	}
+	},
 	// 监听路由变化
-		// watch: {
-		// 	$route (to, from) {
-		// 		console.log(from.path, to.path)
-		// 	}
-		// }
+	watch: {
+		$route (to, from) {
+			// 路由到Home，字体变为黑色
+			if (to.path === '/home') {
+				this.textColor = '#34495e'
+			} else {
+				// 除Home之外，字体变白色
+				this.textColor = '#FFFFFF'
+			}
+		}
+	}
+	// watch: {
+	// 	textColor (newValue, oldValue) {
+	// 		console.log(newValue)
+	// 	}
+	// }
 }
 </script>
 

@@ -2,7 +2,11 @@
 	<div>
 		<Header></Header>
 		<div :style="{'background-image': post.banner}" class="gis-post-banner">
-			{{post.title}}
+			<h1 style="font-size: 35px;">{{post.title}}</h1>
+			<p style="font-size: 16px">{{post.createTime}}</p>
+			<div class="arrow-down">
+				<a href="javascript:void(0)"></a>
+			</div>
 		</div>
 		<div>{{post.description}}</div>
 		<div>{{post.description}}</div>
@@ -51,22 +55,17 @@ export default {
 </script>
 
 <style>
-/*覆盖gis-nav*/
-/*.gis-header-detail {*/
-/*	background: none !important;*/
-/*	box-shadow: none !important;*/
-/*}*/
-
 .gis-post-banner {
 	width: 100%;
 	height: 280px;
 	box-sizing: border-box;
 	top: 0;
 	left: 0;
-	padding: 100px 20px 25px 20px;
+	padding: 80px 20px 25px 20px;
 	text-align: center;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
+	color: #FFFFFF;
 }
 </style>
