@@ -136,6 +136,8 @@ export default {
 	/*阴影*/
 	box-shadow: 0 0 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
 	font-family: sans-serif;
+	/*切换背景时0.5s动画*/
+	transition: background 0.5s;
 }
 /*logo样式*/
 .gis-logo {

@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<Header/>
-		<transition name="gis-list-container">
-			<div class="gis-list-container" v-show="isListShow">
+		<transition name="gis-list-fade-down">
+			<div class="gis-list-container" v-show="isListShow" key="list">
 				<el-row v-for="(post, index) in postList" :key="index" v-if="index % 2 === 0" style="margin-bottom: 25px;">
 					<!--左侧栏-->
 					<el-col :span="11">
@@ -143,9 +143,9 @@ export default {
 		}
 	},
 	mounted () {
+		this.getPostList()
 		// 渐入显示文章列表
 		this.isListShow = true
-		this.getPostList()
 	}
 }
 </script>
@@ -221,14 +221,14 @@ export default {
 }
 
 /*重写transition样式*/
-.gis-list-container-enter,
-.gis-list-container-leave-to {
+.gis-list-fade-down-enter,
+.gis-list-fade-down-leave-to {
 	opacity: 0;
 	transform: translateY(-20px);
 }
 
-.gis-list-container-enter-active,
-.gis-list-container-leave-active {
+.gis-list-fade-down-enter-active,
+.gis-list-fade-down-leave-active {
 	transition: all 2s ease;
 }
 
