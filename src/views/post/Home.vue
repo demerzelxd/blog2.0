@@ -10,24 +10,22 @@
 							<div class="gis-img-container">
 								<el-image class="image" :src="getUrl(post)" fit="cover">
 								</el-image>
-								<div class="gis-mask" @click="onMaskClick(post.id)">
+								<div class="gis-mask" @click="onRoute(post.id)">
 									<p style="max-width: 400px; max-height: 100px; margin: 20px auto;">
 										{{ post.description }}
 									</p>
 								</div>
 							</div>
 							<div style="padding: 10px;">
-								<router-link :to="{name: 'PostDetail', params: {postId: post.id}}">
-									<span ref="titleLink">{{ post.title }}</span>
-								</router-link>
+								<span @click="onRoute(post.id)" style="cursor: pointer">{{ post.title }}</span>
 								<div class="bottom clearfix">
 									<time class="time">{{ getCreateTime(post.createTime) }}</time>
-									<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
+									<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" class="gis-tag">
 										#Java
 									</router-link>
-									<router-link :to="{name: 'PostDetail', params: {postId: post.id}}" type="button" class="gis-router-link">
+									<span @click="onRoute(post.id)" class="gis-router-link">
 										Read more
-									</router-link>
+									</span>
 								</div>
 							</div>
 						</el-card>
@@ -38,24 +36,22 @@
 							<div class="gis-img-container">
 								<el-image class="image" :src="getUrl(postList[index + 1])" fit="cover">
 								</el-image>
-								<div class="gis-mask" @click="onMaskClick(postList[index + 1].id)">
+								<div class="gis-mask" @click="onRoute(postList[index + 1].id)">
 									<p style="max-width: 400px; max-height: 100px; margin: 20px auto;">
 										{{ postList[index + 1].description }}
 									</p>
 								</div>
 							</div>
 							<div style="padding: 10px;">
-								<router-link :to="{name: 'PostDetail', params: {postId: postList[index + 1].id}}">
-									<span ref="titleLink">{{ postList[index + 1].title }}</span>
-								</router-link>
+								<span @click="onRoute(postList[index + 1].id)" style="cursor: pointer">{{ postList[index + 1].title }}</span>
 								<div class="bottom clearfix">
 									<time class="time">{{ getCreateTime(postList[index + 1].createTime) }}</time>
-									<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" style="font-size: 14px; color: teal">
+									<router-link :to="{name: 'Tags', params: {tagName: 'Java'}}" class="gis-tag">
 										#Java
 									</router-link>
-									<router-link :to="{name: 'PostDetail', params: {postId: postList[index + 1].id}}" type="button" class="gis-router-link">
+									<span @click="onRoute(postList[index + 1].id)" class="gis-router-link">
 										Read more
-									</router-link>
+									</span>
 								</div>
 							</div>
 						</el-card>
@@ -131,8 +127,8 @@ export default {
 			this.pageSize = size
 			this.getPostList(this.pageNow, size)
 		},
-		// 点击遮罩层调往文章详情页
-		onMaskClick (id) {
+		// id路由跳转
+		onRoute (id) {
 			this.$router.push({name: 'PostDetail', params: {postId: id}})
 		},
 		// 格式化日期
@@ -181,6 +177,12 @@ export default {
 	transition: opacity 0.3s;
 }
 
+.gis-tag {
+	font-size: 14px;
+	color: teal;
+	text-decoration: none;
+}
+
 .gis-img-container:hover .gis-mask {
 	opacity: 1;
 }
@@ -191,6 +193,7 @@ export default {
 	font-size: 14px;
 	font-weight: bold;
 	color: #42b983 !important;
+	cursor: pointer;
 }
 
 /*elementUI的card样式*/
@@ -232,19 +235,6 @@ export default {
 	transition: all 2s ease;
 }
 
-/*重写router-link样式*/
-a:-webkit-any-link {
-	color: #34495e;
-	text-decoration: none;
-}
-
-.router-link-active {
-	text-decoration: none;
-}
-
-a:-webkit-any-link:active {
-	color: #42b983;
-}
 /*自定义分页组件*/
 .el-pager li:hover {
 	color: #42b983 !important;

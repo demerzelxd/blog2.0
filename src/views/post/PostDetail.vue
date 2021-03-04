@@ -1,51 +1,44 @@
 <template>
 	<div>
 		<Header ref="header"></Header>
-		<div class="gis-post-container">
-			<div :style="{'background-image': post.banner}" class="gis-post-banner" ref="banner">
-				<transition name="gis-post-fade-down">
-					<!--动画不生效的话就用v-if代替v-show-->
-					<div v-if="isPostShow">
-						<h1 style="font-size: 35px;" key="title">{{post.title}}</h1>
-						<p style="font-size: 16px" key="time">{{post.createTime}}</p>
-						<div class="arrow-down" key="arrow">
-							<a href.prevent style="cursor: pointer;" @click="scrollDown()"></a>
-						</div>
-					</div>
-				</transition>
-			</div>
+		<div :style="{'background-image': post.banner}" class="gis-post-banner" ref="banner">
 			<transition name="gis-post-fade-down">
+				<!--动画不生效的话就用v-if代替v-show-->
 				<div v-if="isPostShow">
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
-					<div>{{post.description}}</div>
+					<h1 style="font-size: 35px;" key="title">{{post.title}}</h1>
+					<p style="font-size: 16px" key="time">{{post.createTime}}</p>
+					<div class="arrow-down" key="arrow">
+						<a href.prevent style="cursor: pointer;" @click="scrollDown()"></a>
+					</div>
 				</div>
 			</transition>
 		</div>
+		<transition name="gis-post-fade-in">
+			<div v-if="isPostShow" class="gis-post-container">
+				<markdown-it-vue class="md-body" :content="content" />
+			</div>
+		</transition>
 	</div>
 </template>
 
 <script>
 import Header from '../../components/Header'
+// 引入markdown-it-vue
+import MarkdownItVue from 'markdown-it-vue'
+import 'markdown-it-vue/dist/markdown-it-vue.css'
 export default {
 	name: 'PostDetail',
 	data () {
 		return {
 			post: {},
 			isPostShow: false,
-			headerHeight: ''
+			headerHeight: '',
+			content: ''
 		}
 	},
 	components: {
-		Header
+		Header,
+		MarkdownItVue
 	},
 	methods: {
 		getPostDetail () {
@@ -54,6 +47,7 @@ export default {
 				if (this.post.banner === null || this.post.banner === undefined || this.post.banner === '') {
 					this.post.banner = require('geopattern').generate(this.post.title).toDataUrl()
 				}
+				this.content = this.post.content
 			})
 		},
 		// 点击arrow向下滚动至内容
@@ -74,7 +68,9 @@ export default {
 
 <style>
 .gis-post-container {
-	min-height: 600px;
+	max-width: 1000px;
+	margin: 35px auto;
+	min-height: 400px;
 	height: 100%;
 }
 
@@ -109,13 +105,25 @@ export default {
 }
 
 /*重写transition样式*/
+/*fade-down*/
 .gis-post-fade-down-enter-active,
 .gis-post-fade-down-leave-active {
-	transition: all 1s ease;
+	transition: all 0.4s ease;
+	transition-delay: 0.05s;
 }
 .gis-post-fade-down-enter,
 .gis-post-fade-down-leave-to {
 	transform: translateY(-20px);
+	opacity: 0;
+}
+/*fade-in*/
+.gis-post-fade-in-enter-active,
+.gis-post-fade-in-leave-active {
+	transition: all 0.4s ease;
+	transition-delay: 0.05s;
+}
+.gis-post-fade-in-enter,
+.gis-post-fade-in-leave-to {
 	opacity: 0;
 }
 /*动画效果*/
@@ -132,6 +140,25 @@ export default {
 	50% {
 		opacity: 1;
 	}
+}
+/*重写markdown-it*/
+.markdown-body {
+	font-family: 'Source Sans Pro', 'Noto Serif SC', -apple-system, BlinkMacSystemFont ,Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+.markdown-body blockquote {
+	border-left: .25em solid #42b983;
+	background: #f8f8f8;
+	padding: 15px 20px;
+}
+
+/*重写router-link样式*/
+.markdown-body a {
+	color: #42b983;
+}
+
+.markdown-body a:hover {
+	text-decoration: none;
 }
 
 </style>

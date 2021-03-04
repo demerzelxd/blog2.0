@@ -17,8 +17,12 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 // 引入全局axios拦截
 import './axios-interceptor'
+// 引入mavon-editor
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
 Vue.use(ElementUI)
+Vue.use(mavonEditor)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 // 配置NProgress
