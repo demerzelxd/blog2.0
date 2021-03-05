@@ -150,7 +150,7 @@ export default {
 .gis-list-container {
 	max-width: 1000px;
 	margin: 85px auto;
-	min-height: 400px;
+	min-height: 635px;
 	height: 100%;
 }
 

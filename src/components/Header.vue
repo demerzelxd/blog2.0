@@ -125,7 +125,7 @@ export default {
 }
 .gis-nav {
 	margin: 0 auto;
-	background-color: rgba(255, 255, 255, 0.9);
+	background-color: rgba(255, 255, 255, 0.98);
 	/*固定*/
 	position: fixed;
 	width: 100%;

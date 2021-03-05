@@ -15,7 +15,7 @@
 		</div>
 		<transition name="gis-post-fade-in">
 			<div v-if="isPostShow" class="gis-post-container">
-				<markdown-it-vue class="md-body" :content="content" />
+				<markdown-it-vue class="md-body" :content="content" :options="options"/>
 			</div>
 		</transition>
 	</div>
@@ -33,7 +33,13 @@ export default {
 			post: {},
 			isPostShow: false,
 			headerHeight: '',
-			content: ''
+			content: '',
+			options: {
+				githubToc: {
+					anchorLinkSymbol: '#',
+					anchorLinkSpace: true
+				}
+			}
 		}
 	},
 	components: {
@@ -56,12 +62,24 @@ export default {
 			document.documentElement.scrollTo({top: 280 - this.headerHeight, behavior: 'smooth'})
 		}
 	},
-	mounted () {
+	created () {
 		this.getPostDetail()
+	},
+	mounted () {
 		// 渐入显示文章详情
 		this.isPostShow = true
 		// 获取导航栏高度
 		this.headerHeight = this.$refs.header.$el.offsetHeight
+		// 一开始就路由定位
+		if (this.$route.hash) {
+			this.$nextTick(() => {
+				setTimeout(() => {
+					// decodeURIComponent用于对中文解码
+					// console.log(document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0])
+					document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0].click()
+				}, 0)
+			})
+		}
 	}
 }
 </script>
@@ -70,7 +88,7 @@ export default {
 .gis-post-container {
 	max-width: 1000px;
 	margin: 35px auto;
-	min-height: 400px;
+	min-height: 628px;
 	height: 100%;
 }
 
@@ -159,6 +177,11 @@ export default {
 
 .markdown-body a:hover {
 	text-decoration: none;
+}
+
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+	padding-top: 60px;
+	margin-top: -50px;
 }
 
 </style>
