@@ -197,6 +197,10 @@ export default {
 }
 
 /*elementUI的card样式*/
+.el-card {
+	color: #34495e;
+}
+
 .time {
 	font-size: 14px;
 	color: #999;

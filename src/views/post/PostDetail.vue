@@ -77,9 +77,18 @@ export default {
 					// decodeURIComponent用于对中文解码
 					// console.log(document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0])
 					document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0].click()
-				}, 0)
+				}, 250)
 			})
 		}
+	},
+	watch: {
+		// TODO: 返回前进键失效
+		// $route (to, from) {
+		// 	console.log(to.hash)
+		// 	// 适用于在文章页面按前进后退，也可以定位到标题
+		// 	console.log(document.getElementById(decodeURIComponent(to.hash).substring(1)).children[0])
+		// 	// document.getElementById(decodeURIComponent(to.hash).substring(1)).children[0].click()
+		// }
 	}
 }
 </script>
@@ -182,6 +191,11 @@ export default {
 .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
 	padding-top: 60px;
 	margin-top: -50px;
+	transition: all .3s ease-out;
 }
 
+.markdown-body h1:hover, .markdown-body h2:hover, .markdown-body h3:hover, .markdown-body h4:hover, .markdown-body h5:hover, .markdown-body h6:hover {
+	transform: translateX(5px);
+}
+/*TODO: TOC及代码样式问题*/
 </style>
