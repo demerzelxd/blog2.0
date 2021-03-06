@@ -19,14 +19,8 @@
 			</div>
 			<div class="gis-toc-container" :class="gisTocFixed" key="tocContainer">
 				<strong><i class="el-icon-s-unfold"></i> 目录</strong>
-				<!--<el-tabs @tab-click="handleClick" v-model="activeName" :tab-position="tabPosition" style="height: auto;">-->
-				<!--	<el-tab-pane :name="'tab'+index" :class="item.lev" v-for="(item, index) in navList" :key="index" :label="item.name"></el-tab-pane>-->
-				<!--</el-tabs>-->
-				<el-tabs tab-position="right" style="height: 100%;">
-					<el-tab-pane label="用户管理"></el-tab-pane>
-					<el-tab-pane label="配置管理"></el-tab-pane>
-					<el-tab-pane label="角色管理"></el-tab-pane>
-					<el-tab-pane label="定时任务补偿"></el-tab-pane>
+				<el-tabs tab-position="right" style="height: 100%;" @tab-click="handleClick" v-model="activeToc">
+					<el-tab-pane v-for="(toc, index) in tocList" :key="index" :label="toc.name" :name="toc.name"></el-tab-pane>
 				</el-tabs>
 			</div>
 		</transition-group>
@@ -52,12 +46,10 @@ export default {
 					anchorLinkSpace: true
 				}
 			},
-			scrollTop: ''
-			// // 目录
-			// activeName: 'tab0',
-			// tabPosition: 'right',
-			// scroll: '',
-			// navList: []
+			scrollTop: '',
+			// 目录
+			activeToc: '3.3 Authenticator',
+			tocList: []
 		}
 	},
 	components: {
@@ -85,25 +77,54 @@ export default {
 			if (!this.scrollTop) {
 				this.scrollTop = 0
 			}
+		},
+		// 获取所有标题
+		selectAllTitle () {
+			let titleNodeList = document.querySelectorAll('.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6')
+			// console.log(Array.from(titleNodeList))
+			this.tocList = Array.from(titleNodeList)
+			this.tocList.forEach(item => {
+				item.name = item.innerText.substring(2)
+				item.level = item.localName.substring(1)
+			})
+		},
+		setTocStyle () {
+			let itemNodeList = document.querySelectorAll('.el-tabs__item')
+			// console.log(itemNodeList)
+			for (let i = 0; i < itemNodeList.length; i++) {
+				if (this.tocList[i].level === '1') {
+					itemNodeList[i].style.paddingLeft = '20px'
+					itemNodeList[i].style.fontSize = '16px'
+					itemNodeList[i].style.fontWeight = '700'
+				} else if (this.tocList[i].level === '2') {
+					itemNodeList[i].style.paddingLeft = '30px'
+					itemNodeList[i].style.fontSize = '14px'
+					itemNodeList[i].style.fontWeight = '600'
+				} else if (this.tocList[i].level === '3') {
+					itemNodeList[i].style.paddingLeft = '40px'
+					itemNodeList[i].style.fontSize = '12px'
+					itemNodeList[i].style.fontWeight = '500'
+				} else if (this.tocList[i].level === '4') {
+					itemNodeList[i].style.paddingLeft = '50px'
+					itemNodeList[i].style.fontSize = '10px'
+					itemNodeList[i].style.fontWeight = '400'
+				} else if (this.tocList[i].level === '5') {
+					itemNodeList[i].style.paddingLeft = '60px'
+					itemNodeList[i].style.fontSize = '8px'
+					itemNodeList[i].style.fontWeight = '300'
+				} else if (this.tocList[i].level === '6') {
+					itemNodeList[i].style.paddingLeft = '70px'
+					itemNodeList[i].style.fontSize = '6px'
+					itemNodeList[i].style.fontWeight = '200'
+				}
+			}
+		},
+		// 点击目录跳转
+		handleClick (tab, event) {
+			console.log(tab)
+			// console.log(this.tocList[tab.index].children[0])
+			this.tocList[tab.index].children[0].click()
 		}
-		// // 目录
-		// handleClick (tab, event) {
-		// 	this.jump(tab.index)
-		// },
-		// jump (index) {
-		// 	let jump = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
-		// 	// 获取需要滚动的距离
-		// 	let total = jump[index].offsetTop - 80
-		// 	// Chrome
-		// 	document.body.scrollTop = total
-		// 	// Firefox
-		// 	document.documentElement.scrollTop = total
-		// 	// Safari
-		// 	window.pageYOffset = total
-		// 	// $('html, body').animate({
-		// 	// 'scrollTop': total
-		// 	// }, 400);
-		// }
 	},
 	computed: {
 		// 是否应该固定TOC
@@ -125,6 +146,18 @@ export default {
 		this.isPostShow = true
 		// 获取导航栏高度
 		this.headerHeight = this.$refs.header.$el.offsetHeight
+		// 初始化toc
+		this.$nextTick(() => {
+			setTimeout(() => {
+				this.selectAllTitle()
+			}, 100)
+		})
+		// 设置toc样式
+		this.$nextTick(() => {
+			setTimeout(() => {
+				this.setTocStyle()
+			}, 100)
+		})
 		// 一开始就路由定位
 		if (this.$route.hash) {
 			this.$nextTick(() => {
@@ -289,6 +322,10 @@ export default {
 	margin: 10px 0 0 0
 }
 
+.el-tabs__item {
+	height: 28px;
+}
+
 .el-tabs__item:hover {
 	color: #42b983;
 }
@@ -301,5 +338,5 @@ export default {
 	background-color: #42b983;
 }
 
-/*TODO: TOC及代码样式问题，评论区*/
+/*TODO: 代码样式问题，评论区*/
 </style>
