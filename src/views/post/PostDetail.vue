@@ -82,13 +82,23 @@ export default {
 		}
 	},
 	watch: {
-		// TODO: 返回前进键失效
-		// $route (to, from) {
-		// 	console.log(to.hash)
-		// 	// 适用于在文章页面按前进后退，也可以定位到标题
-		// 	console.log(document.getElementById(decodeURIComponent(to.hash).substring(1)).children[0])
-		// 	// document.getElementById(decodeURIComponent(to.hash).substring(1)).children[0].click()
-		// }
+		$route: {
+			handler () {
+				if (this.$route.hash) {
+					// console.log(decodeURIComponent(this.$route.hash))
+					// console.log(document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0])
+					this.$nextTick(() => {
+						setTimeout(() => {
+							document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0].click()
+						}, 0)
+					})
+				} else {
+					// 地址没有hash，说明是返回顶部
+					document.documentElement.scrollTo({top: 0, behavior: 'smooth'})
+				}
+			},
+			deep: true
+		}
 	}
 }
 </script>
@@ -188,14 +198,17 @@ export default {
 	text-decoration: none;
 }
 
+/*标题动画容易误触，去除*/
 .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
 	padding-top: 60px;
 	margin-top: -50px;
-	transition: all .3s ease-out;
+	/*transition: all .3s ease-out;*/
 }
 
-.markdown-body h1:hover, .markdown-body h2:hover, .markdown-body h3:hover, .markdown-body h4:hover, .markdown-body h5:hover, .markdown-body h6:hover {
-	transform: translateX(5px);
-}
-/*TODO: TOC及代码样式问题*/
+/*.markdown-body h1:hover, .markdown-body h2:hover, .markdown-body h3:hover, .markdown-body h4:hover, .markdown-body h5:hover, .markdown-body h6:hover {*/
+/*	transform: translateX(5px);*/
+/*	cursor: pointer;*/
+/*}*/
+
+/*TODO: TOC及代码样式问题，评论区*/
 </style>
