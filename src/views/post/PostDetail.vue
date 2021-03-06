@@ -13,11 +13,23 @@
 				</div>
 			</transition>
 		</div>
-		<transition name="gis-post-fade-in">
-			<div v-if="isPostShow" class="gis-post-container">
+		<transition-group name="gis-post-fade-in">
+			<div v-if="isPostShow" class="gis-post-container" key="postContainer">
 				<markdown-it-vue class="md-body" :content="content" :options="options"/>
 			</div>
-		</transition>
+			<div class="gis-toc-container" :class="gisTocFixed" key="tocContainer">
+				<strong><i class="el-icon-s-unfold"></i> 目录</strong>
+				<!--<el-tabs @tab-click="handleClick" v-model="activeName" :tab-position="tabPosition" style="height: auto;">-->
+				<!--	<el-tab-pane :name="'tab'+index" :class="item.lev" v-for="(item, index) in navList" :key="index" :label="item.name"></el-tab-pane>-->
+				<!--</el-tabs>-->
+				<el-tabs tab-position="right" style="height: 100%;">
+					<el-tab-pane label="用户管理"></el-tab-pane>
+					<el-tab-pane label="配置管理"></el-tab-pane>
+					<el-tab-pane label="角色管理"></el-tab-pane>
+					<el-tab-pane label="定时任务补偿"></el-tab-pane>
+				</el-tabs>
+			</div>
+		</transition-group>
 	</div>
 </template>
 
@@ -39,7 +51,13 @@ export default {
 					anchorLinkSymbol: '#',
 					anchorLinkSpace: true
 				}
-			}
+			},
+			scrollTop: ''
+			// // 目录
+			// activeName: 'tab0',
+			// tabPosition: 'right',
+			// scroll: '',
+			// navList: []
 		}
 	},
 	components: {
@@ -60,6 +78,43 @@ export default {
 		scrollDown () {
 			// 已知banner的高度为280px
 			document.documentElement.scrollTo({top: 280 - this.headerHeight, behavior: 'smooth'})
+		},
+		handleTocScroll () {
+			// 设置滚动距离
+			this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+			if (!this.scrollTop) {
+				this.scrollTop = 0
+			}
+		}
+		// // 目录
+		// handleClick (tab, event) {
+		// 	this.jump(tab.index)
+		// },
+		// jump (index) {
+		// 	let jump = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+		// 	// 获取需要滚动的距离
+		// 	let total = jump[index].offsetTop - 80
+		// 	// Chrome
+		// 	document.body.scrollTop = total
+		// 	// Firefox
+		// 	document.documentElement.scrollTop = total
+		// 	// Safari
+		// 	window.pageYOffset = total
+		// 	// $('html, body').animate({
+		// 	// 'scrollTop': total
+		// 	// }, 400);
+		// }
+	},
+	computed: {
+		// 是否应该固定TOC
+		isTimeToFixed () {
+			return this.scrollTop >= 280 - this.headerHeight
+		},
+		// 控制样式是否展示
+		gisTocFixed () {
+			// 当滚动到一定距离，启用gisTocFixed，固定目录
+			// console.log('实际：' + this.scrollTop)
+			return {gisTocFixed: this.isTimeToFixed}
 		}
 	},
 	created () {
@@ -80,6 +135,11 @@ export default {
 				}, 250)
 			})
 		}
+		// 监听滚动条
+		window.addEventListener('scroll', this.handleTocScroll, true)
+	},
+	destroyed () {
+		window.removeEventListener('scroll', this.handleTocScroll, false)
 	},
 	watch: {
 		$route: {
@@ -107,8 +167,21 @@ export default {
 .gis-post-container {
 	max-width: 1000px;
 	margin: 35px auto;
+	position: relative;
 	min-height: 628px;
 	height: 100%;
+}
+
+.gis-toc-container {
+	position: absolute;
+	right: 50px;
+	top: 300px;
+	width: 250px;
+}
+
+.gisTocFixed {
+	position: fixed;
+	top: 80px;
 }
 
 .gis-post-banner {
@@ -209,6 +282,24 @@ export default {
 /*	transform: translateX(5px);*/
 /*	cursor: pointer;*/
 /*}*/
+
+/*修改elementUI自带样式*/
+.el-tabs--right .el-tabs__header.is-right {
+	float: left;
+	margin: 10px 0 0 0
+}
+
+.el-tabs__item:hover {
+	color: #42b983;
+}
+
+.el-tabs__item.is-active {
+	color: #42b983;
+}
+
+.el-tabs__active-bar {
+	background-color: #42b983;
+}
 
 /*TODO: TOC及代码样式问题，评论区*/
 </style>
