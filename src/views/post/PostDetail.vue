@@ -15,7 +15,7 @@
 		</div>
 		<el-link class="gis-icon" :class="gisIconFixed" :underline="false" @click="controlToc()" ref="foldBtn"><i class="el-icon-s-fold"></i></el-link>
 		<transition-group name="gis-post-fade-in">
-			<div v-if="isPostShow" class="gis-post-container" key="postContainer">
+			<div v-if="isPostShow" class="gis-post-container" :class="gisPostSwitch" key="postContainer">
 				<markdown-it-vue class="md-body" :content="content" :options="options"/>
 			</div>
 			<div class="gis-toc-container" :class="gisTocFixed" key="tocContainer" ref="tocContainer">
@@ -83,15 +83,6 @@ export default {
 			}
 		},
 		// 获取所有标题
-		selectAllTitle () {
-			let titleNodeList = document.querySelectorAll('.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6')
-			// console.log(Array.from(titleNodeList))
-			this.tocList = Array.from(titleNodeList)
-			this.tocList.forEach(item => {
-				item.name = item.innerText.substring(2)
-				item.level = item.localName.substring(1)
-			})
-		},
 		setTocStyle () {
 			let itemNodeList = document.querySelectorAll('.el-tabs__item')
 			// console.log(itemNodeList)
@@ -125,7 +116,6 @@ export default {
 		},
 		// 点击目录跳转
 		handleClick (tab, event) {
-			console.log(tab)
 			// console.log(this.tocList[tab.index].children[0])
 			this.tocList[tab.index].children[0].click()
 		},
@@ -146,8 +136,6 @@ export default {
 				// 如果有背景色
 				this.$refs.tocContainer.style.backgroundColor = ''
 			}
-			console.log(this.$refs.tocContainer.style.zIndex)
-			console.log(this.$refs.tocContainer.style.backgroundColor)
 		}
 	},
 	computed: {
@@ -161,8 +149,23 @@ export default {
 			// console.log('实际：' + this.scrollTop)
 			return {gisTocFixed: this.isTimeToFixed}
 		},
+		// 计算tocList
+		getTocList () {
+			let titleNodeList = document.querySelectorAll('.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6')
+			// console.log(Array.from(titleNodeList))
+			let tocList = Array.from(titleNodeList)
+			tocList.forEach(item => {
+				item.name = item.innerText.substring(2)
+				item.level = item.localName.substring(1)
+			})
+			return tocList
+		},
 		gisIconFixed () {
 			return {gisIconFixed: this.isTimeToFixed}
+		},
+		// 目录出现时，切换post主题宽度
+		gisPostSwitch () {
+			return {gisPostSwitch: this.isTocShow}
 		}
 	},
 	created () {
@@ -176,7 +179,7 @@ export default {
 		// 初始化toc
 		this.$nextTick(() => {
 			setTimeout(() => {
-				this.selectAllTitle()
+				this.tocList = this.getTocList
 			}, 250)
 		})
 		// 设置toc样式
@@ -192,6 +195,14 @@ export default {
 					// decodeURIComponent用于对中文解码
 					// console.log(document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0])
 					document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0].click()
+					// 一开始就toc标题激活
+					this.tocList.forEach(toc => {
+						// hash为shiro-实战教程
+						if (decodeURIComponent(this.$route.hash).substring(1) === toc.id) {
+							// name为Shiro 实战教程的toc被激活
+							this.activeToc = toc.name
+						}
+					})
 				}, 250)
 			})
 		}
@@ -204,12 +215,22 @@ export default {
 	watch: {
 		$route: {
 			handler () {
+				// 路由发生跳转，说明已加载完
 				if (this.$route.hash) {
 					// console.log(decodeURIComponent(this.$route.hash))
 					// console.log(document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0])
 					this.$nextTick(() => {
 						setTimeout(() => {
+							// 跳转到hash
 							document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0].click()
+							// 监听hash，toc侧边栏对应标题激活
+							this.tocList.forEach(toc => {
+								// hash为shiro-实战教程
+								if (decodeURIComponent(this.$route.hash).substring(1) === toc.id) {
+									// name为Shiro 实战教程的toc被激活
+									this.activeToc = toc.name
+								}
+							})
 						}, 0)
 					})
 				} else {
@@ -230,6 +251,11 @@ export default {
 	position: relative;
 	min-height: 628px;
 	height: 100%;
+}
+
+.gisPostSwitch {
+	max-width: 800px;
+	margin: 35px 100px 35px 100px;
 }
 
 .gis-toc-container {
