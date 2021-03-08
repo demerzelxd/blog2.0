@@ -9,6 +9,7 @@
 			</el-main>
 			<el-footer>
 				<div class="gis-footer">
+					<el-divider><i class="el-icon-lollipop"></i></el-divider>
 					<p>Designed and Coded by © <el-link :underline="false" style="color: #42b983; margin-bottom: 2px" @click="refresh()">Giskard</el-link></p>
 				</div>
 			</el-footer>
@@ -47,7 +48,7 @@ export default {
 	color: #34495e;
 }
 .gis-footer {
-	max-width: 1200px;
+	max-width: 1000px;
 	margin: 0 auto;
 	text-align: center;
 	font-size: 8px;
@@ -72,5 +73,11 @@ export default {
 /*自定义backTop*/
 .el-backtop, .el-calendar-table td.is-today {
 	color: teal
+}
+.el-divider__text {
+	color: #999;
+}
+.el-divider--horizontal {
+	margin: 12px 0
 }
 </style>

@@ -8,7 +8,7 @@
 			@click="refresh()"
 			style="cursor: pointer; margin-left: 60px;float: left">
 		</el-image>
-		<el-menu :default-active="getActiveIndex()" mode="horizontal" @select="handleSelect" :text-color="textColor" class="gis-menu">
+		<el-menu :default-active="getActiveIndex()" mode="horizontal" @select="handleSelect" :text-color="textColor" :active-text-color="activeTextColor" class="gis-menu">
 			<el-menu-item index="/home" @click="refresh()"><span>Home</span></el-menu-item>
 			<el-menu-item index="/tags"><span>Tags</span></el-menu-item>
 			<el-menu-item index="/archives"><span>Archives</span></el-menu-item>
@@ -26,6 +26,7 @@ export default {
 		return {
 			icon: icon,
 			textColor: '#34495e',
+			activeTextColor: '#34495e',
 			scrollTop: ''
 		}
 	},
@@ -46,9 +47,9 @@ export default {
 		},
 		// 获取当前激活路由
 		getActiveIndex () {
-			// 形如/tag/Java
+			// 形如/tags/Java
 			if (this.$route.path.lastIndexOf('/') !== 0) {
-				// 返回形如/tag
+				// 返回形如/tags
 				return ('/' + this.$route.path.split('/')[1])
 			}
 			// 形如/home直接返回
@@ -62,9 +63,11 @@ export default {
 				// 当路由非首页且滚动距离为0
 				if (this.isScrollTopZero) {
 					this.textColor = '#FFFFFF'
+					this.activeTextColor = '#FFFFFF'
 				} else {
 					// 当路由非首页且滚动距离大于0
 					this.textColor = '#34495e'
+					this.activeTextColor = '#34495e'
 				}
 			}
 		}
@@ -90,6 +93,7 @@ export default {
 		if (this.$route.path !== '/home') {
 			// 路由非首页，在一开始把字体颜色设为白色
 			this.textColor = '#FFFFFF'
+			this.activeTextColor = '#FFFFFF'
 		}
 		// 监听滚动条
 		window.addEventListener('scroll', this.handleScroll, true)
@@ -103,9 +107,11 @@ export default {
 			// 路由到Home，字体变为黑色
 			if (to.path === '/home') {
 				this.textColor = '#34495e'
+				this.activeTextColor = '#34495e'
 			} else {
 				// 除Home之外，字体变白色
 				this.textColor = '#FFFFFF'
+				this.activeTextColor = '#FFFFFF'
 			}
 		}
 	}
