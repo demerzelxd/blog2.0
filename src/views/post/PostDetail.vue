@@ -13,15 +13,18 @@
 				</div>
 			</transition>
 		</div>
+		<el-link class="gis-icon" :class="gisIconFixed" :underline="false" @click="controlToc()" ref="foldBtn"><i class="el-icon-s-fold"></i></el-link>
 		<transition-group name="gis-post-fade-in">
 			<div v-if="isPostShow" class="gis-post-container" key="postContainer">
 				<markdown-it-vue class="md-body" :content="content" :options="options"/>
 			</div>
-			<div class="gis-toc-container" :class="gisTocFixed" key="tocContainer">
-				<strong><i class="el-icon-s-unfold"></i> 目录</strong>
-				<el-tabs tab-position="right" style="height: 100%;" @tab-click="handleClick" v-model="activeToc">
-					<el-tab-pane v-for="(toc, index) in tocList" :key="index" :label="toc.name" :name="toc.name"></el-tab-pane>
-				</el-tabs>
+			<div class="gis-toc-container" :class="gisTocFixed" key="tocContainer" ref="tocContainer">
+				<strong style="margin-left: 27px;" v-show="isTocShow"><i class="el-icon-s-unfold"></i> 目录</strong>
+				<div style="width: 250px;height: 470px;position: relative;overflow: hidden;">
+					<el-tabs tab-position="right" style="height: 100%;" @tab-click="handleClick" v-model="activeToc" v-show="isTocShow">
+						<el-tab-pane v-for="(toc, index) in tocList" :key="index" :label="toc.name" :name="toc.name"></el-tab-pane>
+					</el-tabs>
+				</div>
 			</div>
 		</transition-group>
 	</div>
@@ -49,7 +52,8 @@ export default {
 			scrollTop: '',
 			// 目录
 			activeToc: '3.3 Authenticator',
-			tocList: []
+			tocList: [],
+			isTocShow: false
 		}
 	},
 	components: {
@@ -124,6 +128,26 @@ export default {
 			console.log(tab)
 			// console.log(this.tocList[tab.index].children[0])
 			this.tocList[tab.index].children[0].click()
+		},
+		// 控制Toc是否展示及背景色
+		controlToc () {
+			this.isTocShow = !this.isTocShow
+			// 如果没有z-index
+			if (!this.$refs.tocContainer.style.zIndex || this.$refs.tocContainer.style.zIndex === '-1') {
+				this.$refs.tocContainer.style.zIndex = '1'
+			} else {
+				// 如果有z-index
+				this.$refs.tocContainer.style.zIndex = '-1'
+			}
+			// 如果没有背景色，添加背景色
+			if (!this.$refs.tocContainer.style.backgroundColor) {
+				this.$refs.tocContainer.style.backgroundColor = '#FFFFFF'
+			} else {
+				// 如果有背景色
+				this.$refs.tocContainer.style.backgroundColor = ''
+			}
+			console.log(this.$refs.tocContainer.style.zIndex)
+			console.log(this.$refs.tocContainer.style.backgroundColor)
 		}
 	},
 	computed: {
@@ -136,6 +160,9 @@ export default {
 			// 当滚动到一定距离，启用gisTocFixed，固定目录
 			// console.log('实际：' + this.scrollTop)
 			return {gisTocFixed: this.isTimeToFixed}
+		},
+		gisIconFixed () {
+			return {gisIconFixed: this.isTimeToFixed}
 		}
 	},
 	created () {
@@ -150,13 +177,13 @@ export default {
 		this.$nextTick(() => {
 			setTimeout(() => {
 				this.selectAllTitle()
-			}, 100)
+			}, 250)
 		})
 		// 设置toc样式
 		this.$nextTick(() => {
 			setTimeout(() => {
 				this.setTocStyle()
-			}, 100)
+			}, 250)
 		})
 		// 一开始就路由定位
 		if (this.$route.hash) {
@@ -210,11 +237,27 @@ export default {
 	right: 50px;
 	top: 300px;
 	width: 250px;
+	height: 510px;
+}
+
+.gis-icon {
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: 286px;
+	right: 5px
 }
 
 .gisTocFixed {
 	position: fixed;
-	top: 80px;
+	top: 60px;
+	padding-top: 19px;
+}
+
+.gisIconFixed {
+	position: fixed;
+	top: 60px;
+	margin-top: 5px;
 }
 
 .gis-post-banner {
@@ -304,30 +347,24 @@ export default {
 	text-decoration: none;
 }
 
-/*标题动画容易误触，去除*/
 .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
 	padding-top: 60px;
 	margin-top: -50px;
-	/*transition: all .3s ease-out;*/
 }
-
-/*.markdown-body h1:hover, .markdown-body h2:hover, .markdown-body h3:hover, .markdown-body h4:hover, .markdown-body h5:hover, .markdown-body h6:hover {*/
-/*	transform: translateX(5px);*/
-/*	cursor: pointer;*/
-/*}*/
 
 /*修改elementUI自带样式*/
 .el-tabs--right .el-tabs__header.is-right {
 	float: left;
-	margin: 10px 0 0 0
 }
 
 .el-tabs__item {
-	height: 28px;
+	color: #34495e;
+	transition: all .3s ease-out;
 }
 
 .el-tabs__item:hover {
 	color: #42b983;
+	transform: translateX(5px);
 }
 
 .el-tabs__item.is-active {
@@ -336,6 +373,14 @@ export default {
 
 .el-tabs__active-bar {
 	background-color: #42b983;
+}
+
+.el-link.el-link--default {
+	color: #34495e;
+}
+
+.el-link.el-link--default:hover {
+	color: #42b983;
 }
 
 /*TODO: 代码样式问题，评论区*/
