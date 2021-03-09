@@ -12,18 +12,15 @@
 		</div>
 		<transition-group name="gis-tag-fade-down">
 			<div v-if="isTagShow" class="gis-tag-cloud" key="tagCloud">
-				<a class="tag0" data-name="tag-react">前端开发</a>
-				<a class="tag1" data-name="tag-react">深入理解系列</a>
-				<a class="tag2" data-name="tag-react">php</a>
-				<a class="tag3" data-name="tag-react">Java</a>
+				<a v-for="(tag, index) in tagList" :key="index" :style="{'background': colorList[index % colorList.length]}" :href="'#'+tag.tagName">{{tag.tagName}}</a>
 			</div>
 			<div v-if="isTagShow" class="gis-tag-container" key="tagContainer">
-				<div v-for="(postTag, indexOut) in postTagList" :key="indexOut">
-					<h3 :id="postTag[0].name" style="padding-top: 60px;margin-top: -50px;" class="gis-tag-anchor"><a :href="'#'+postTag[0].name">#</a> {{postTag[0].name}}</h3>
-					<ul v-for="(post, indexIn) in postTag" :key="indexIn">
+				<div v-for="(postList, tagName) in postTagMap" :key="tagName">
+					<h3 :id="tagName" class="gis-tag-anchor"><a :href="'#'+tagName">#</a> {{tagName}}</h3>
+					<ul v-for="(post, index) in postList" :key="index">
 						<li>
-							<router-link :to="{name: 'PostDetail', params: {postId: post.postId}}" style="text-decoration: none;color: #42b983;">
-								{{post.postTitle}}
+							<router-link :to="{name: 'PostDetail', params: {postId: post.id}}" style="text-decoration: none;color: #42b983;">
+								{{post.title}}
 							</router-link>
 						</li>
 					</ul>
@@ -45,26 +42,24 @@ export default {
 			banner: '',
 			isTagShow: false,
 			tagName: '',
-			postTagList: [
-				[
-					{ name: 'React', postId: '51', postTitle: '初识React' },
-					{ name: 'React', postId: '50', postTitle: 'React事件系统' },
-					{ name: 'React', postId: '49', postTitle: 'React使用表单的正确姿势' },
-					{ name: 'React', postId: '48', postTitle: 'React使用表单的正确姿势' },
-					{ name: 'React', postId: '47', postTitle: 'React组件间的通信' }
-				],
-				[
-					{ name: '深入理解系列', postId: '46', postTitle: '深入理解JavaScript原型和原型链' },
-					{ name: '深入理解系列', postId: '45', postTitle: '深入理解flex-grow、flex-basis、flex-shrink' }
-				],
-				[
-					{ name: '前端开发', postId: '44', postTitle: '纪念那些年我写的PHP' },
-					{ name: '前端开发', postId: '43', postTitle: '纯手工打造前端后端分离项目中的mock-server' }
-				]
-			]
+			tagList: [],
+			postTagMap: {},
+			colorList: ['#fa5a5a', '#f0d264', '#82c8a0', '#7fccde', '#6698cb', '#cb99c5', '#bbbbee', '#9cb2e1']
 		}
 	},
 	methods: {
+		getTagList () {
+			this.$http.get('/tags/findAll').then((resp) => {
+				// console.log(resp.data);
+				this.tagList = resp.data.data
+			})
+		},
+		getAllTagsAndBlogs () {
+			this.$http.get('/tags/findAllTagsAndBlogs').then((resp) => {
+				// console.log(resp.data);
+				this.postTagMap = resp.data.data
+			})
+		},
 		toTag () {
 			if (this.tagName) {
 				document.getElementById(decodeURIComponent(this.tagName)).children[0].click()
@@ -73,17 +68,20 @@ export default {
 		}
 	},
 	mounted () {
+		// 获取数据
+		this.getTagList()
+		this.getAllTagsAndBlogs()
 		// 设置banner
 		this.banner = require('geopattern').generate('tags').toDataUrl()
 		// 渐入显示标签详情
 		this.isTagShow = true
 		// 从别的路由获取到的参数
-		this.tagName = this.$route.params.tagName
+		this.tagName = this.$route.params.tagName || this.$route.hash.substring(1)
 		// 跳转到标签
 		this.$nextTick(() => {
 			setTimeout(() => {
 				this.toTag()
-			}, 0)
+			}, 1000)
 		})
 	},
 	watch: {
@@ -122,14 +120,16 @@ export default {
 }
 
 .gis-tag-cloud {
-	margin-top: 50px;
-	text-align: center
+	max-width: 1000px;
+	margin: 50px auto;
+	text-align: center;
+	cursor: pointer;
 }
 
 .gis-tag-cloud a {
 	border: none;
 	line-height: 28px;
-	margin: 0 4px 8px 0;
+	margin: 0 8px 8px 0;
 	background: #63a35c;
 	display: inline-block;
 	border-radius: 4px;
@@ -137,28 +137,24 @@ export default {
 	color: #fff;
 	transition: background 0.5s;
 	cursor: pointer;
-}
-
-.gis-tag-cloud .tag0 {
-	background: #bbe;
-}
-.gis-tag-cloud .tag1 {
-	background: #9cb2e1;
-}
-.gis-tag-cloud .tag2 {
-	background-color: rgba(0,133,161,0.8);
+	text-decoration: none;
 }
 
 .gis-tag-cloud a:hover {
-	background: #0085a1;
+	background: #0085a1 !important;
 }
 
 .gis-tag-container {
 	max-width: 1000px;
-	margin: 30px auto;
+	margin: 50px auto;
 	position: relative;
 	min-height: 628px;
 	height: 100%;
+}
+
+.gis-tag-anchor {
+	padding-top: 60px;
+	margin-top: -50px;
 }
 
 .gis-tag-anchor a {

@@ -12,7 +12,7 @@
 			<el-menu-item index="/home" @click="refresh()"><span>Home</span></el-menu-item>
 			<el-menu-item index="/tags"><span>Tags</span></el-menu-item>
 			<el-menu-item index="/archives"><span>Archives</span></el-menu-item>
-			<el-menu-item index="/projects"><span>Projects</span></el-menu-item>
+			<!--<el-menu-item index="/projects"><span>Projects</span></el-menu-item>-->
 			<el-menu-item index="/about"><span>About</span></el-menu-item>
 		</el-menu>
 	</div>

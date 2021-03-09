@@ -271,7 +271,8 @@ export default {
 	height: 30px;
 	position: absolute;
 	top: 286px;
-	right: 5px
+	right: 5px;
+	z-index: 2;
 }
 
 .gisTocFixed {

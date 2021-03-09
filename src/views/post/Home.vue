@@ -20,8 +20,8 @@
 								<span @click="onRoute(post.id)" style="cursor: pointer">{{ post.title }}</span>
 								<div class="bottom clearfix">
 									<time class="time">{{ getCreateTime(post.createTime) }}</time>
-									<router-link :to="{name: 'Tags', params: {tagName: 'React'}}" class="gis-tag">
-										#React
+									<router-link :to="{name: 'Tags', params: {tagName: post.tagName}}" class="gis-tag">
+										#{{post.tagName}}
 									</router-link>
 									<span @click="onRoute(post.id)" class="gis-router-link">
 										Read more
@@ -46,8 +46,8 @@
 								<span @click="onRoute(postList[index + 1].id)" style="cursor: pointer">{{ postList[index + 1].title }}</span>
 								<div class="bottom clearfix">
 									<time class="time">{{ getCreateTime(postList[index + 1].createTime) }}</time>
-									<router-link :to="{name: 'Tags', params: {tagName: 'React'}}" class="gis-tag">
-										#React
+									<router-link :to="{name: 'Tags', params: {tagName: postList[index + 1].tagName}}" class="gis-tag">
+										#{{postList[index + 1].tagName}}
 									</router-link>
 									<span @click="onRoute(postList[index + 1].id)" class="gis-router-link">
 										Read more
