@@ -1,5 +1,7 @@
 # blog2.0
 
+[![time tracker](https://wakatime.com/badge/github/demerzelxd/blog2.0.svg)](https://wakatime.com/badge/github/demerzelxd/blog2.0)
+
 > A Vue.js project
 
 ## Build Setup
