@@ -19,7 +19,7 @@
 					<h3 :id="tagName" class="gis-tag-anchor"><a :href="'#'+tagName">#</a> {{tagName}}</h3>
 					<ul v-for="(post, index) in postList" :key="index">
 						<li>
-							<router-link :to="{name: 'PostDetail', params: {postId: post.id}}" style="text-decoration: none;color: #42b983;">
+							<router-link :to="{name: 'PostDetail', params: {postId: post.id}}" class="gis-tag-router-link">
 								{{post.title}}
 							</router-link>
 						</li>
@@ -67,10 +67,12 @@ export default {
 			}
 		}
 	},
-	mounted () {
+	created () {
 		// 获取数据
 		this.getTagList()
 		this.getAllTagsAndBlogs()
+	},
+	mounted () {
 		// 设置banner
 		this.banner = require('geopattern').generate('tags').toDataUrl()
 		// 渐入显示标签详情
@@ -78,11 +80,13 @@ export default {
 		// 从别的路由获取到的参数
 		this.tagName = this.$route.params.tagName || this.$route.hash.substring(1)
 		// 跳转到标签
-		this.$nextTick(() => {
-			setTimeout(() => {
-				this.toTag()
-			}, 1000)
-		})
+		if (this.tagName) {
+			this.$nextTick(() => {
+				setTimeout(() => {
+					this.toTag()
+				}, 1000)
+			})
+		}
 	},
 	watch: {
 		$route: {
@@ -120,7 +124,7 @@ export default {
 }
 
 .gis-tag-cloud {
-	max-width: 1000px;
+	max-width: 500px;
 	margin: 50px auto;
 	text-align: center;
 	cursor: pointer;
@@ -145,7 +149,7 @@ export default {
 }
 
 .gis-tag-container {
-	max-width: 1000px;
+	max-width: 550px;
 	margin: 50px auto;
 	position: relative;
 	min-height: 628px;
@@ -160,6 +164,18 @@ export default {
 .gis-tag-anchor a {
 	color: #42b983;
 	text-decoration: none;
+}
+
+.gis-tag-router-link {
+	text-decoration: none;
+	/*transform失效，使用inline-block即可*/
+	display:inline-block;
+	color: #42b983;
+	transition: all 0.3s ease;
+}
+
+.gis-tag-router-link:hover{
+	transform: translateX(10px);
 }
 
 .gis-tag-fade-down-enter-active,
