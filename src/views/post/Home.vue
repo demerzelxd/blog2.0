@@ -236,7 +236,7 @@ export default {
 
 .gis-list-fade-down-enter-active,
 .gis-list-fade-down-leave-active {
-	transition: all 2s ease;
+	transition: all 1s ease;
 }
 
 /*自定义分页组件*/

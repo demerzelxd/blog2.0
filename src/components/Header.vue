@@ -1,15 +1,9 @@
 <template>
 	<!--导航菜单-->
 	<div class="gis-nav" :class="gisSwitchNav">
-		<el-image
-			class="gis-logo"
-			:src="icon"
-			fit="fit"
-			@click="refresh()"
-			style="cursor: pointer; margin-left: 60px;float: left">
-		</el-image>
+		<img class="gis-logo" :src="icon" alt="" @click="refresh()">
 		<el-menu :default-active="getActiveIndex()" mode="horizontal" @select="handleSelect" :text-color="textColor" :active-text-color="activeTextColor" class="gis-menu">
-			<el-menu-item index="/home" @click="refresh()"><span>Home</span></el-menu-item>
+			<el-menu-item index="/home"><span>Home</span></el-menu-item>
 			<el-menu-item index="/tags"><span>Tags</span></el-menu-item>
 			<el-menu-item index="/archives"><span>Archives</span></el-menu-item>
 			<!--<el-menu-item index="/projects"><span>Projects</span></el-menu-item>-->
@@ -97,6 +91,12 @@ export default {
 		}
 		// 监听滚动条
 		window.addEventListener('scroll', this.handleScroll, true)
+		// 点击一个menu之后，就失去焦点
+		window.addEventListener('mousedown', function (e) {
+			if (e.target.id !== 'write') {
+				e.preventDefault()
+			}
+		}, false)
 	},
 	beforeDestroy () {
 		window.removeEventListener('scroll', this.handleScroll, false)
@@ -115,11 +115,6 @@ export default {
 			}
 		}
 	}
-	// watch: {
-	// 	textColor (newValue, oldValue) {
-	// 		console.log(newValue)
-	// 	}
-	// }
 }
 </script>
 
@@ -149,7 +144,9 @@ export default {
 .gis-logo {
 	width: 45px;
 	height: 45px;
-	margin: 10px 0;
+	margin: 10px 0 10px 60px;
+	cursor: pointer;
+	float: left;
 }
 /*menu样式*/
 .gis-menu {
