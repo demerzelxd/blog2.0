@@ -15,12 +15,12 @@
 				<a v-for="(tag, index) in tagList" :key="index" :style="{'background': colorList[index % colorList.length]}" :href="'#'+tag.tagName">{{tag.tagName}}</a>
 			</div>
 			<div v-if="isTagShow" class="gis-tag-container" key="tagContainer">
-				<div v-for="(postList, tagName) in postTagMap" :key="tagName">
-					<h3 :id="tagName" class="gis-tag-anchor"><a :href="'#'+tagName">#</a> {{tagName}}</h3>
-					<ul v-for="(post, index) in postList" :key="index">
+				<div v-for="(tagPosts, index) in tagPostList" :key="index">
+					<h3 :id="tagPosts.tagName" class="gis-tag-anchor"><a :href="'#'+tagPosts.tagName">#</a> {{tagPosts.tagName}}</h3>
+					<ul v-for="(tagPostItem, index) in tagPosts.tagItemInfoList" :key="index">
 						<li>
-							<router-link :to="{name: 'PostDetail', params: {postId: post.id}}" class="gis-tag-router-link">
-								{{post.title}}
+							<router-link :to="{name: 'PostDetail', params: {postId: tagPostItem.id}}" class="gis-tag-router-link">
+								{{tagPostItem.title}}
 							</router-link>
 						</li>
 					</ul>
@@ -43,7 +43,7 @@ export default {
 			isTagShow: false,
 			tagName: '',
 			tagList: [],
-			postTagMap: {},
+			tagPostList: [],
 			colorList: ['#fa5a5a', '#f0d264', '#82c8a0', '#7fccde', '#6698cb', '#cb99c5', '#bbbbee', '#9cb2e1']
 		}
 	},
@@ -57,7 +57,7 @@ export default {
 		getAllTagsAndBlogs () {
 			this.$http.get('/tags/findAllTagsAndBlogs').then((resp) => {
 				// console.log(resp.data);
-				this.postTagMap = resp.data.data
+				this.tagPostList = resp.data.data
 			})
 		},
 		toTag () {
@@ -84,7 +84,7 @@ export default {
 			this.$nextTick(() => {
 				setTimeout(() => {
 					this.toTag()
-				}, 1000)
+				}, 250)
 			})
 		}
 	},

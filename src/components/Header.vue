@@ -167,6 +167,7 @@ export default {
 .el-menu-item {
 	font-size: 14px;
 	padding: 0 10px;
+	border-bottom-color: transparent !important;
 }
 
 .el-menu-item:hover {

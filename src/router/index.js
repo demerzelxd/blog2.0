@@ -12,7 +12,7 @@ export default new Router({
 		{path: '/', redirect: '/home'},
 		{path: '/home', name: 'Home', component: Home, meta: {keepAlive: true}},
 		{path: '/post/:postId', name: 'PostDetail', component: PostDetail},
-		{path: '/tags', name: 'Tags', component: Tags},
+		{path: '/tags', name: 'Tags', component: Tags, meta: {keepAlive: true}},
 		{path: '/archives', name: 'Archives', component: Archives, meta: {keepAlive: true}}
 	],
 	// 去除#，把Router的mode修改为history模式，VueRouter默认的模式为hash模式

@@ -12,12 +12,12 @@
 		</div>
 		<transition name="gis-archive-fade-down">
 			<div v-if="isArchiveShow" class="gis-archive-container">
-				<el-timeline v-for="(archive, index) in archiveList" :key="index">
-					<strong style="font-size: 1.6em">{{archive.year}}</strong>
+				<el-timeline v-for="(archives, index) in archiveList" :key="index">
+					<strong style="font-size: 1.6em">{{archives.year}}</strong>
 					<br>
 					<br>
 					<el-timeline-item
-						v-for="(archiveItem, index) in archive.archiveItemInfo"
+						v-for="(archiveItem, index) in archives.archiveItemInfoList"
 						:key="index"
 						:color="colorList[index % colorList.length]"
 						size="large"
