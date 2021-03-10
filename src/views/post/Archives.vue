@@ -12,17 +12,19 @@
 		</div>
 		<transition name="gis-archive-fade-down">
 			<div v-if="isArchiveShow" class="gis-archive-container">
-				<el-timeline v-for="(yearRecords, year) in archiveMap" :key="year">
-					<strong style="font-size: 1.6em">{{year}}</strong>
+				<el-timeline v-for="(archive, index) in archiveList" :key="index">
+					<strong style="font-size: 1.6em">{{archive.year}}</strong>
 					<br>
 					<br>
 					<el-timeline-item
-						v-for="(record, index) in yearRecords"
+						v-for="(archiveItem, index) in archive.archiveItemInfo"
 						:key="index"
 						:color="colorList[index % colorList.length]"
 						size="large"
-						:timestamp="record.md">
-						{{record.title}}
+						:timestamp="archiveItem.md">
+						<router-link :to="{name: 'PostDetail', params: {postId: archiveItem.id}}" class="gis-archive-router-link">
+							{{archiveItem.title}}
+						</router-link>
 					</el-timeline-item>
 				</el-timeline>
 			</div>
@@ -41,36 +43,20 @@ export default {
 		return {
 			banner: '',
 			isArchiveShow: false,
-			archiveMap: {
-				2020: [{
-					title: '解密setState机制',
-					md: '01-14'
-				}, {
-					title: '组件生命周期详解',
-					md: '09-17'
-				}, {
-					title: '理解Virtual-DOM模型',
-					md: '09-10'
-				}, {
-					title: 'React组件间的通信',
-					md: '09-02'
-				}],
-				2019: [{
-					title: '解密setState机制',
-					md: '01-14'
-				}, {
-					title: '组件生命周期详解',
-					md: '09-17'
-				}, {
-					title: '理解Virtual-DOM模型',
-					md: '09-10'
-				}, {
-					title: 'React组件间的通信',
-					md: '09-02'
-				}]
-			},
+			archiveList: [],
 			colorList: ['#fa5a5a', '#f0d264', '#82c8a0', '#7fccde', '#6698cb', '#cb99c5', '#bbbbee', '#9cb2e1']
 		}
+	},
+	methods: {
+		getArchiveList () {
+			this.$http.get('/blog/findArchivesByYear').then((resp) => {
+				// console.log(resp.data);
+				this.archiveList = resp.data.data
+			})
+		}
+	},
+	created () {
+		this.getArchiveList()
 	},
 	mounted () {
 		// 设置banner
@@ -96,8 +82,21 @@ export default {
 }
 
 .gis-archive-container {
-	max-width: 550px;
+	max-width: 650px;
 	margin: 50px auto;
+	min-height: 628px;
+}
+
+.gis-archive-router-link {
+	text-decoration: none;
+	/*transform失效，使用inline-block即可*/
+	display:inline-block;
+	color: #42b983;
+	transition: all 0.3s ease;
+}
+
+.gis-archive-router-link:hover{
+	transform: translateX(10px);
 }
 
 .gis-archive-fade-down-enter-active,
