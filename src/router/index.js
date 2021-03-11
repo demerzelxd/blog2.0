@@ -4,6 +4,7 @@ import Home from '../views/post/Home'
 import PostDetail from '../views/post/PostDetail'
 import Tags from '../views/post/Tags'
 import Archives from '../views/post/Archives'
+import About from '../views/post/About';
 
 Vue.use(Router)
 
@@ -13,7 +14,8 @@ export default new Router({
 		{path: '/home', name: 'Home', component: Home, meta: {keepAlive: true}},
 		{path: '/post/:postId', name: 'PostDetail', component: PostDetail},
 		{path: '/tags', name: 'Tags', component: Tags},
-		{path: '/archives', name: 'Archives', component: Archives}
+		{path: '/archives', name: 'Archives', component: Archives},
+		{path: '/about', name: 'About', component: About}
 	],
 	// 去除#，把Router的mode修改为history模式，VueRouter默认的模式为hash模式
 	// 加上#后访问别的路由不会刷新页面，换成history后切换路由需要刷新
