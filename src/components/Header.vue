@@ -2,12 +2,12 @@
 	<!--导航菜单-->
 	<div class="gis-nav" :class="gisSwitchNav">
 		<img class="gis-logo" :src="icon" alt="" @click="refresh()">
-		<el-menu :default-active="getActiveIndex()" mode="horizontal" @select="handleSelect" :text-color="textColor" :active-text-color="activeTextColor" class="gis-menu">
-			<el-menu-item index="/home"><span>Home</span></el-menu-item>
-			<el-menu-item index="/tags"><span>Tags</span></el-menu-item>
-			<el-menu-item index="/archives"><span>Archives</span></el-menu-item>
+		<el-menu :default-active="getActiveIndex()" ref="menu" mode="horizontal" @select="handleSelect" :text-color="textColor" :active-text-color="activeTextColor" class="gis-menu">
+			<el-menu-item index="/home" ref="home"><span>Home</span></el-menu-item>
+			<el-menu-item index="/tags" ref="tags"><span>Tags</span></el-menu-item>
+			<el-menu-item index="/archives" ref="archives"><span>Archives</span></el-menu-item>
 			<!--<el-menu-item index="/projects"><span>Projects</span></el-menu-item>-->
-			<el-menu-item index="/about"><span>About</span></el-menu-item>
+			<el-menu-item index="/about" ref="about"><span>About</span></el-menu-item>
 		</el-menu>
 	</div>
 </template>
@@ -31,6 +31,11 @@ export default {
 			if (this.$route.path !== key) {
 				this.$router.push(key)
 			}
+			// 避免路由跳转后，menu的背景色变为白色。使其失去焦点
+			this.$refs.home.$el.blur()
+			this.$refs.tags.$el.blur()
+			this.$refs.archives.$el.blur()
+			this.$refs.about.$el.blur()
 		},
 		refresh () {
 			if (this.$route.path === '/home') {
@@ -91,12 +96,6 @@ export default {
 		}
 		// 监听滚动条
 		window.addEventListener('scroll', this.handleScroll, true)
-		// 点击一个menu之后，就失去焦点
-		window.addEventListener('mousedown', function (e) {
-			if (e.target.id !== 'write') {
-				e.preventDefault()
-			}
-		}, false)
 	},
 	beforeDestroy () {
 		window.removeEventListener('scroll', this.handleScroll, false)

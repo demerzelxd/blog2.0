@@ -10,7 +10,7 @@ Vue.use(Router)
 export default new Router({
 	routes: [
 		{path: '/', redirect: '/home'},
-		{path: '/home', name: 'Home', component: Home},
+		{path: '/home', name: 'Home', component: Home, meta: {keepAlive: true}},
 		{path: '/post/:postId', name: 'PostDetail', component: PostDetail},
 		{path: '/tags', name: 'Tags', component: Tags},
 		{path: '/archives', name: 'Archives', component: Archives}

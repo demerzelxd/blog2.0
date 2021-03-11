@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<Header ref="header"></Header>
 		<div :style="{'background-image': post.banner}" class="gis-post-banner" ref="banner">
 			<transition name="gis-post-fade-down">
 				<!--动画不生效的话就用v-if代替v-show-->
@@ -31,7 +30,6 @@
 </template>
 
 <script>
-import Header from '../../components/Header'
 // 引入markdown-it-vue
 import MarkdownItVue from 'markdown-it-vue'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
@@ -41,7 +39,6 @@ export default {
 		return {
 			post: {},
 			isPostShow: false,
-			headerHeight: '',
 			content: '',
 			options: {
 				githubToc: {
@@ -57,7 +54,6 @@ export default {
 		}
 	},
 	components: {
-		Header,
 		MarkdownItVue
 	},
 	methods: {
@@ -73,7 +69,7 @@ export default {
 		// 点击arrow向下滚动至内容
 		scrollDown () {
 			// 已知banner的高度为280px
-			document.documentElement.scrollTo({top: 280 - this.headerHeight, behavior: 'smooth'})
+			document.documentElement.scrollTo({top: 280 - 60, behavior: 'smooth'})
 		},
 		handleTocScroll () {
 			// 设置滚动距离
@@ -136,12 +132,18 @@ export default {
 				// 如果有背景色
 				this.$refs.tocContainer.style.backgroundColor = ''
 			}
+		},
+		goDetailAnchor (selector) {
+			// 由于markdown-it默认的id是#1权限的管理，querySelector(selector)只能开头是英文字母，不能是1234
+			// 故修改为getElementById
+			let anchor = document.getElementById(decodeURIComponent(selector).substring(1))
+			document.documentElement.scrollTop = anchor.offsetParent.offsetTop + anchor.offsetTop
 		}
 	},
 	computed: {
 		// 是否应该固定TOC
 		isTimeToFixed () {
-			return this.scrollTop >= 280 - this.headerHeight
+			return this.scrollTop >= 280 - 60
 		},
 		// 控制样式是否展示
 		gisTocFixed () {
@@ -174,8 +176,6 @@ export default {
 	mounted () {
 		// 渐入显示文章详情
 		this.isPostShow = true
-		// 获取导航栏高度
-		this.headerHeight = this.$refs.header.$el.offsetHeight
 		// 初始化toc
 		this.$nextTick(() => {
 			setTimeout(() => {
@@ -193,8 +193,7 @@ export default {
 			this.$nextTick(() => {
 				setTimeout(() => {
 					// decodeURIComponent用于对中文解码
-					// console.log(document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0])
-					document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0].click()
+					this.goDetailAnchor(this.$route.hash)
 					// 一开始就toc标题激活
 					this.tocList.forEach(toc => {
 						// hash为shiro-实战教程
@@ -217,12 +216,10 @@ export default {
 			handler () {
 				// 路由发生跳转，说明已加载完
 				if (this.$route.hash) {
-					// console.log(decodeURIComponent(this.$route.hash))
-					// console.log(document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0])
 					this.$nextTick(() => {
 						setTimeout(() => {
-							// 跳转到hash
-							document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0].click()
+							// 跳转到anchor
+							this.goDetailAnchor(this.$route.hash)
 							// 监听hash，toc侧边栏对应标题激活
 							this.tocList.forEach(toc => {
 								// hash为shiro-实战教程

@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<Header/>
 		<div :style="{'background-image': banner}" class="gis-archive-banner">
 			<transition name="gis-archive-fade-down">
 				<!--动画不生效的话就用v-if代替v-show-->
@@ -33,12 +32,8 @@
 </template>
 
 <script>
-import Header from '../../components/Header'
 export default {
 	name: 'Archives',
-	components: {
-		Header
-	},
 	data () {
 		return {
 			banner: '',

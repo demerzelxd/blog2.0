@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<Header/>
 		<div :style="{'background-image': banner}" class="gis-tag-banner">
 			<transition name="gis-tag-fade-down">
 				<!--动画不生效的话就用v-if代替v-show-->
@@ -12,7 +11,7 @@
 		</div>
 		<transition-group name="gis-tag-fade-down">
 			<div v-if="isTagShow" class="gis-tag-cloud" key="tagCloud">
-				<a v-for="(tag, index) in tagList" :key="index" :style="{'background': colorList[index % colorList.length]}" :href="'#'+tag.tagName">{{tag.tagName}}</a>
+				<a v-for="(tagName, index) in tagList" :key="index" :style="{'background': colorList[index % colorList.length]}" :href="'#'+tagName">{{tagName}}</a>
 			</div>
 			<div v-if="isTagShow" class="gis-tag-container" key="tagContainer">
 				<div v-for="(tagPosts, index) in tagPostList" :key="index">
@@ -31,12 +30,8 @@
 </template>
 
 <script>
-import Header from '../../components/Header'
 export default {
 	name: 'Tags',
-	components: {
-		Header
-	},
 	data () {
 		return {
 			banner: '',
@@ -48,43 +43,38 @@ export default {
 		}
 	},
 	methods: {
-		getTagList () {
-			this.$http.get('/tags/findAll').then((resp) => {
-				// console.log(resp.data);
-				this.tagList = resp.data.data
-			})
-		},
-		getAllTagsAndBlogs () {
+		initAllTagData () {
 			this.$http.get('/tags/findAllTagsAndBlogs').then((resp) => {
 				// console.log(resp.data);
+				// 初始化tagPostList
 				this.tagPostList = resp.data.data
+				for (let i = 0; i < this.tagPostList.length; i++) {
+					// 初始化tagList
+					this.tagList.push(this.tagPostList[i].tagName)
+				}
 			})
 		},
-		toTag () {
-			if (this.tagName) {
-				document.getElementById(decodeURIComponent(this.tagName)).children[0].click()
-				// console.log(document.getElementById(decodeURIComponent(this.tagName)).children[0])
-			}
+		goAnchor (selector) {
+			let anchor = document.querySelector(decodeURIComponent(selector))
+			// console.log(anchor.offsetParent.offsetTop + anchor.offsetTop)
+			document.documentElement.scrollTop = anchor.offsetParent.offsetTop + anchor.offsetTop
 		}
 	},
 	created () {
 		// 获取数据
-		this.getTagList()
-		this.getAllTagsAndBlogs()
+		this.initAllTagData()
 	},
 	mounted () {
 		// 设置banner
 		this.banner = require('geopattern').generate('tags').toDataUrl()
 		// 渐入显示标签详情
 		this.isTagShow = true
-		// 从别的路由获取到的参数
-		this.tagName = this.$route.params.tagName || this.$route.hash.substring(1)
-		// 跳转到标签
-		if (this.tagName) {
+		// 一开始就跳转到anchor
+		if (this.$route.hash) {
 			this.$nextTick(() => {
 				setTimeout(() => {
-					this.toTag()
-				}, 250)
+					this.goAnchor(this.$route.hash)
+				}, 400)
 			})
 		}
 	},
@@ -94,8 +84,8 @@ export default {
 				if (this.$route.hash) {
 					this.$nextTick(() => {
 						setTimeout(() => {
-							// 跳转到hash
-							document.getElementById(decodeURIComponent(this.$route.hash).substring(1)).children[0].click()
+							// 路由切换时跳转到anchor
+							this.goAnchor(this.$route.hash)
 						}, 0)
 					})
 				} else {

@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<Header/>
 		<transition name="gis-list-fade-down">
 			<div class="gis-list-container" v-show="isListShow" key="list">
 				<el-row v-for="(post, index) in postList" :key="index" v-if="index % 2 === 0" style="margin-bottom: 25px;">
@@ -20,7 +19,7 @@
 								<span @click="onRoute(post.id)" style="cursor: pointer">{{ post.title }}</span>
 								<div class="bottom clearfix">
 									<time class="time">{{ getCreateTime(post.createTime) }}</time>
-									<router-link :to="{name: 'Tags', params: {tagName: post.tagName}}" class="gis-tag">
+									<router-link :to="{name: 'Tags', hash: '#'+post.tagName}" class="gis-tag">
 										#{{post.tagName}}
 									</router-link>
 									<span @click="onRoute(post.id)" class="gis-router-link">
@@ -46,7 +45,7 @@
 								<span @click="onRoute(postList[index + 1].id)" style="cursor: pointer">{{ postList[index + 1].title }}</span>
 								<div class="bottom clearfix">
 									<time class="time">{{ getCreateTime(postList[index + 1].createTime) }}</time>
-									<router-link :to="{name: 'Tags', params: {tagName: postList[index + 1].tagName}}" class="gis-tag">
+									<router-link :to="{name: 'Tags', hash: '#'+postList[index + 1].tagName}" class="gis-tag">
 										#{{postList[index + 1].tagName}}
 									</router-link>
 									<span @click="onRoute(postList[index + 1].id)" class="gis-router-link">

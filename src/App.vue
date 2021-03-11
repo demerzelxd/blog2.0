@@ -1,6 +1,7 @@
 <template>
 	<div id="app">
 		<el-container>
+			<Header/>
 			<el-main style="padding: 0">
 				<keep-alive>
 					<router-view v-if="$route.meta.keepAlive"></router-view>
@@ -20,8 +21,12 @@
 </template>
 
 <script>
+import Header from './components/Header'
 export default {
 	name: 'App',
+	components: {
+		Header
+	},
 	methods: {
 		refresh () {
 			if (this.$route.path === '/home') {
