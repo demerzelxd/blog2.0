@@ -29,6 +29,8 @@ module.exports = {
 		'no-tabs': 'off',
 		// 关闭多余空格警告
 		'no-trailing-spaces': 'off',
+        // 关闭缩进警告
+        'no-mixed-spaces-and-tabs': 'off',
 		// allow async-await
 		'generator-star-spacing': 'off',
 		// allow debugger during development

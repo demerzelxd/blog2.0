@@ -53,7 +53,7 @@
 <script>
 import icon from '../../assets/img/icon.svg'
 export default {
-	name: "About",
+	name: 'About',
 	data () {
 		return {
 			banner: '',

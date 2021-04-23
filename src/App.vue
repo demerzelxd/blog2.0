@@ -1,14 +1,14 @@
 <template>
 	<div id="app">
 		<el-container>
-			<Header/>
+			<Header v-show="this.isHeaderFooterShow"></Header>
 			<el-main style="padding: 0">
 				<keep-alive>
 					<router-view v-if="$route.meta.keepAlive"></router-view>
 				</keep-alive>
 				<router-view v-if="!$route.meta.keepAlive"></router-view>
 			</el-main>
-			<el-footer>
+			<el-footer v-show="this.isHeaderFooterShow">
 				<div class="gis-footer">
 					<el-divider><i class="el-icon-lollipop"></i></el-divider>
 					<p>Designed and Coded by © <el-link :underline="false" style="color: #42b983; margin-bottom: 2px" @click="refresh()">Giskard</el-link></p>
@@ -34,6 +34,11 @@ export default {
 			} else {
 				this.$router.push('/home')
 			}
+		}
+	},
+	computed: {
+		isHeaderFooterShow () {
+			return this.$route.path.indexOf('/admin') === -1
 		}
 	}
 }
