@@ -44,7 +44,7 @@ export default {
 	},
 	methods: {
 		initAllTagData () {
-			this.$http.get('/tags/findAllTagsAndBlogs').then((resp) => {
+			this.$http.get('/api/tags/findAllTagsAndBlogs').then((resp) => {
 				// console.log(resp.data);
 				// 初始化tagPostList
 				this.tagPostList = resp.data.data

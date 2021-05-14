@@ -44,7 +44,7 @@ export default {
 	},
 	methods: {
 		getArchiveList () {
-			this.$http.get('/blog/findArchivesByYear').then((resp) => {
+			this.$http.get('/api/blog/findArchivesByYear').then((resp) => {
 				// console.log(resp.data);
 				this.archiveList = resp.data.data
 			})

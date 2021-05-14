@@ -58,7 +58,7 @@ export default {
 	},
 	methods: {
 		getPostDetail () {
-			this.$http.get('/blog/' + this.$route.params.postId).then((resp) => {
+			this.$http.get('/api/blog/' + this.$route.params.postId).then((resp) => {
 				this.post = resp.data.data
 				if (this.post.banner === null || this.post.banner === undefined || this.post.banner === '') {
 					this.post.banner = require('geopattern').generate(this.post.title).toDataUrl()
@@ -241,7 +241,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .gis-post-container {
 	max-width: 1000px;
 	margin: 35px auto;
@@ -351,54 +351,8 @@ export default {
 		opacity: 1;
 	}
 }
-/*重写markdown-it*/
-.markdown-body {
-	font-family: 'Source Sans Pro', 'Noto Serif SC', -apple-system, BlinkMacSystemFont ,Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-}
-
-.markdown-body blockquote {
-	border-left: .25em solid #42b983;
-	background: #f8f8f8;
-	padding: 15px 20px;
-}
-
-/*重写router-link样式*/
-.markdown-body a {
-	color: #42b983;
-}
-
-.markdown-body a:hover {
-	text-decoration: none;
-}
-
-.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
-	padding-top: 60px;
-	margin-top: -50px;
-}
 
 /*修改elementUI自带样式*/
-.el-tabs--right .el-tabs__header.is-right {
-	float: left;
-}
-
-.el-tabs__item {
-	color: #34495e;
-	transition: all .3s ease-out;
-}
-
-.el-tabs__item:hover {
-	color: #42b983;
-	transform: translateX(5px);
-}
-
-.el-tabs__item.is-active {
-	color: #42b983;
-}
-
-.el-tabs__active-bar {
-	background-color: #42b983;
-}
-
 .el-link.el-link--default {
 	color: #34495e;
 }
@@ -408,4 +362,53 @@ export default {
 }
 
 /*TODO: 代码样式问题，评论区*/
+</style>
+
+<style>
+/*重写markdown-it*/
+.markdown-body {
+    font-family: 'Source Sans Pro', 'Noto Serif SC', -apple-system, BlinkMacSystemFont ,Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji !important;
+}
+
+.markdown-body blockquote {
+    border-left: .25em solid #42b983 !important;
+    background: #f8f8f8 !important;
+    padding: 15px 20px !important;
+}
+
+/*重写router-link样式*/
+.markdown-body a {
+    color: #42b983 !important;
+}
+
+.markdown-body a:hover {
+    text-decoration: none !important;
+}
+
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+    padding-top: 60px !important;
+    margin-top: -50px !important;
+}
+
+.el-tabs--right .el-tabs__header.is-right {
+    float: left !important;
+}
+
+.el-tabs__item {
+    color: #34495e !important;
+    transition: all .3s ease-out !important;
+}
+
+.el-tabs__item:hover {
+    color: #42b983 !important;
+    transform: translateX(5px) !important;
+}
+
+.el-tabs__item.is-active {
+    color: #42b983 !important;
+}
+
+.el-tabs__active-bar {
+    background-color: #42b983 !important;
+}
 </style>

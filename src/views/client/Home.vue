@@ -107,7 +107,7 @@ export default {
 			// 如果没有传参，则默认是1和5
 			pageNow = pageNow || this.pageNow
 			pageSize = pageSize || this.pageSize
-			this.$http.get('/blog/findByPage?pageNow=' + pageNow + '&pageSize=' + pageSize).then((resp) => {
+			this.$http.get('/api/blog/findByPage?pageNow=' + pageNow + '&pageSize=' + pageSize).then((resp) => {
 				// console.log(resp.data);
 				this.postList = resp.data.data.records
 				this.total = resp.data.data.total

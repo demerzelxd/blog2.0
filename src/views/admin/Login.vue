@@ -142,7 +142,7 @@ export default {
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
 					// 验证通过才发送请求提交
-					this.$http.post('/user/login', this.loginForm).then((resp) => {
+					this.$http.post('/api/user/login', this.loginForm).then((resp) => {
 						// console.log(resp.headers)
 						// console.log(resp.data)
 						// 获取返回的header头信息
@@ -168,7 +168,7 @@ export default {
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
 					// 验证通过才发送请求提交
-					this.$http.post('/user/logon', this.logonForm).then((resp) => {
+					this.$http.post('/api/user/logon', this.logonForm).then((resp) => {
 						// console.log(resp.data)
 						// 清空表单
 						this.logonForm = {}
